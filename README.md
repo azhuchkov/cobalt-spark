@@ -1,4 +1,4 @@
-# cobalt-spark
+# Cobalt Spark
 
 A compact Oh My Zsh theme that uses restrained colors to avoid competing with
 typical command output, such as `ls` listings. A prominent lightning anchor
@@ -46,14 +46,22 @@ ZSH_THEME_RANDOM_CANDIDATES=(
 - Enable the Oh My Zsh `virtualenv` plugin to show the active Python
   environment.
 
+## Recommended setup
+
 Use a dark terminal color scheme, such as **One Dark** or **Catppuccin Macchiato**,
 and a font that renders the lightning sign. Most **Nerd Fonts** work;
 [JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip)
-is recommended. See the
-[Oh My Zsh FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues)
-if prompt symbols do not render correctly.
+is recommended.
 
-## Additional tips
+## Troubleshooting
+
+If prompt symbols do not render correctly, see the
+[Oh My Zsh FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues)
+for help with font issues.
+
+## Optional Zsh features
+
+### Command correction
 
 To have Zsh suggest corrections for misspelled command names, enable
 `CORRECT`:
@@ -61,6 +69,8 @@ To have Zsh suggest corrections for misspelled command names, enable
 ```zsh
 setopt CORRECT
 ```
+
+### Command timing
 
 `REPORTTIME` makes Zsh automatically show a timing summary after a command
 uses more CPU time than the given number of seconds. CPU time counts active
