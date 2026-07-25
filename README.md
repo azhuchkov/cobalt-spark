@@ -52,3 +52,23 @@ and a font that renders the lightning sign. Most **Nerd Fonts** work;
 is recommended. See the
 [Oh My Zsh FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues)
 if prompt symbols do not render correctly.
+
+## Additional tips
+
+To have Zsh suggest corrections for misspelled command names, enable
+`CORRECT`:
+
+```zsh
+setopt CORRECT
+```
+
+`REPORTTIME` makes Zsh automatically show a timing summary after a command
+uses more CPU time than the given number of seconds. CPU time counts active
+work, not time spent waiting for input or the network. `TIMEFMT` controls what
+the summary looks like; this example shows elapsed time, CPU usage, and the
+command. It also controls the output of Zsh's `time` keyword:
+
+```zsh
+REPORTTIME=3
+TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%P${(%):-%F{8\}} CPU · ${(%):-%f}%J"
+```
