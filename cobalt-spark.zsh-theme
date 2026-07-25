@@ -2,52 +2,6 @@
 #
 # Copyright (c) 2026 Andrey Zhuchkov
 # SPDX-License-Identifier: MIT
-#
-# A compact prompt that uses restrained colors to avoid competing with typical
-# command output, such as `ls` listings. A prominent lightning anchor makes
-# command lines easy to find while scanning the screen, and visually separates
-# the context on the left from the command on the right.
-#
-# The prompt also includes the parent of the current directory, important git
-# state such as the branch, detached HEAD, and unpushed changes, as well as
-# Python's virtual environment via the `virtualenv` plugin. Nested shells and
-# background jobs are indicated when present.
-#
-# Example:
-# • ~/code/demo (main*) ⚡_                                  [.venv]
-#
-# Install: place this file (`cobalt-spark.zsh-theme`) in the
-# "$ZSH_CUSTOM/themes/" directory and set
-#   ZSH_THEME="cobalt-spark"
-# in ~/.zshrc.
-#
-# To compare themes with an A/B test, use:
-#
-# ZSH_THEME="random"
-# ZSH_THEME_RANDOM_CANDIDATES=(
-#   "cobalt-spark"
-#   "robbyrussell" # or another favorite theme
-# )
-#
-# Recommended settings for the terminal emulator:
-#   font: any font that renders the lightning sign; most Nerd Fonts should work.
-#         "JetBrains Mono Nerd Font Complete" v2.3.3 is a good option:
-#         https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip
-#   colors: dark (for example, "One Dark", "Catppuccin Macchiato")
-#
-# Customization:
-# - To use a different prompt anchor, set `COBALT_SPARK_THEME_PROMPT_SIGN`
-#   in ~/.zshrc, like this:
-#   COBALT_SPARK_THEME_PROMPT_SIGN=' % '
-#
-# - To change the parent prefix length (or disable it entirely), set
-#   `COBALT_SPARK_THEME_PARENT_CAP`.
-#
-# - Enable the `virtualenv` plugin to show the active Python environment.
-#
-# Troubleshooting:
-#   See the OMZ FAQ for font issues:
-#   https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues
 
 __cobalt_spark_pwd_prompt_info() {
   if [[ "$PWD" == "/" ]]; then
