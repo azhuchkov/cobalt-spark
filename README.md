@@ -68,8 +68,10 @@ the theme. It does not reproduce Oh My Zsh configuration options or plugins.
 
 ## Recommended setup
 
-Use a dark terminal color scheme, such as **One Dark** or **Catppuccin Macchiato**,
-and a font that renders the lightning sign. Most **Nerd Fonts** work;
+Use a dark terminal color scheme, such as
+[One Dark](https://github.com/atom/one-dark-syntax) or
+[Catppuccin Macchiato](https://catppuccin.com/palette/), and a font that
+renders the lightning sign. Most [Nerd Fonts](https://www.nerdfonts.com/) work;
 [JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip)
 is recommended.
 
@@ -84,7 +86,7 @@ for help with font issues.
 ### Command correction
 
 To have Zsh suggest corrections for misspelled command names, enable
-`CORRECT`:
+[`CORRECT`](https://zsh.sourceforge.io/Doc/Release/Options.html#index-CORRECT):
 
 ```zsh
 setopt CORRECT
@@ -92,11 +94,13 @@ setopt CORRECT
 
 ### Command timing
 
-`REPORTTIME` makes Zsh automatically show a timing summary after a command
-uses more CPU time than the given number of seconds. CPU time counts active
-work, not time spent waiting for input or the network. `TIMEFMT` controls what
-the summary looks like; this example shows elapsed time, CPU usage, and the
-command. It also controls the output of Zsh's `time` keyword:
+[`REPORTTIME`](https://zsh.sourceforge.io/Doc/Release/Parameters.html#index-REPORTTIME)
+makes Zsh automatically show a timing summary after a command uses more CPU
+time than the given number of seconds. CPU time counts active work, not time
+spent waiting for input or the network.
+[`TIMEFMT`](https://zsh.sourceforge.io/Doc/Release/Parameters.html#index-TIMEFMT)
+controls what the summary looks like; this example shows elapsed time, CPU
+usage, and the command. It also controls the output of Zsh's `time` keyword:
 
 ```zsh
 REPORTTIME=3
