@@ -5,6 +5,9 @@ typical command output, such as `ls` listings. A prominent lightning anchor
 makes command lines easy to find while scanning the screen and visually
 separates the context on the left from the command on the right.
 
+**Experimental:** the theme can also run without Oh My Zsh through its small
+[standalone loader](#standalone-mode-experimental).
+
 <img width="909" height="820" alt="Screenshot 2026-07-25 at 21 31 37" src="https://github.com/user-attachments/assets/7aa363c6-d5d7-4c16-8c63-7fc3c37cc0f0" />
 
 The prompt includes the parent of the current directory, important Git state
@@ -37,14 +40,31 @@ ZSH_THEME_RANDOM_CANDIDATES=(
 )
 ```
 
+## Standalone mode (experimental)
+
+To try the theme with plain Zsh, clone it anywhere convenient:
+
+```sh
+git clone https://github.com/azhuchkov/cobalt-spark.git ~/.cobalt-spark
+```
+
+Then source the standalone loader from `~/.zshrc`:
+
+```zsh
+source ~/.cobalt-spark/cobalt-spark.zsh
+```
+
+The loader provides only the Git and virtual-environment helpers required by
+the theme. It does not reproduce Oh My Zsh configuration options or plugins.
+
 ## Configuration
 
-- Set `COBALT_SPARK_THEME_PROMPT_SIGN` before Oh My Zsh is loaded to use a
+- Set `COBALT_SPARK_THEME_PROMPT_SIGN` before loading the theme to use a
   different prompt anchor, for example `COBALT_SPARK_THEME_PROMPT_SIGN=' % '`.
 - Set `COBALT_SPARK_THEME_PARENT_CAP` to change the maximum parent-directory
   prefix length. Set it to `0` to hide the parent directory.
 - Enable the Oh My Zsh `virtualenv` plugin to show the active Python
-  environment.
+  environment. The standalone loader handles this without a plugin.
 
 ## Recommended setup
 
