@@ -1,7 +1,7 @@
 # Experimental loader for using cobalt-spark without Oh My Zsh.
 
 __git_prompt_git() {
-  GIT_OPTIONAL_LOCKS=0 command git "$@"
+  command git "$@"
 }
 
 parse_git_dirty() {
