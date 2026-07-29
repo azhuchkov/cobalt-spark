@@ -77,9 +77,13 @@ is recommended.
 
 ## Troubleshooting
 
-If prompt symbols do not render correctly, see the
-[Oh My Zsh FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues)
-for help with font issues.
+- If prompt symbols do not render correctly, see the
+  [Oh My Zsh FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues)
+  for help with font issues.
+- If the prompt shows an unexpectedly high shell level inside `tmux`, add
+  `set-environment -gu SHLVL` to `~/.tmux.conf`. For an already running tmux
+  server, run `tmux set-environment -gu SHLVL`; the fix applies to new panes
+  and windows.
 
 ## Optional Zsh features
 
