@@ -8,7 +8,7 @@ separates the context on the left from the command on the right.
 **Experimental:** the theme can also run without Oh My Zsh through its small
 [standalone loader](#standalone-mode-experimental).
 
-<img width="909" height="820" alt="Screenshot 2026-07-25 at 21 31 37" src="https://github.com/user-attachments/assets/7aa363c6-d5d7-4c16-8c63-7fc3c37cc0f0" />
+<img width="909" height="817" alt="Cobalt Spark Screenshot" src="https://github.com/user-attachments/assets/738870bc-e211-4761-a033-251433facdf4" />
 
 The prompt includes the parent of the current directory, important Git state
 such as the branch, detached `HEAD`, working-tree changes, and unpushed commits,
