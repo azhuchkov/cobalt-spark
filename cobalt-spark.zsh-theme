@@ -130,7 +130,10 @@ PROMPT+='${__cobalt_spark_pipeline_color}%(?..%F{9})•'
 PROMPT+=' %B%F{75}$(__cobalt_spark_pwd_prompt_info)%f%b'
 PROMPT+='$(git_prompt_info)'
 # U+FE0E requests text presentation so iTerm does not reserve an emoji cell.
-PROMPT+='%B%F{178}${${COBALT_SPARK_THEME_PROMPT_SIGN- ⚡︎}//\%/%%}%f%b'
+typeset -g __cobalt_spark_default_prompt_sign=$' \u26A1\uFE0E'
+# GNU Screen may suppress the preceding glyph when handling U+FE0E.
+[[ -n ${STY:-} ]] && __cobalt_spark_default_prompt_sign=$' \u26A1'
+PROMPT+='%B%F{178}${${COBALT_SPARK_THEME_PROMPT_SIGN-$__cobalt_spark_default_prompt_sign}//\%/%%}%f%b'
 
 ZSH_THEME_VIRTUALENV_PREFIX="%F{244}[%F{blue}"
 ZSH_THEME_VIRTUALENV_SUFFIX="%F{244}]%f"
