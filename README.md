@@ -85,6 +85,10 @@ is recommended.
   `set-environment -gu SHLVL` to `~/.tmux.conf`. For an already running tmux
   server, run `tmux set-environment -gu SHLVL`; the fix applies to new panes
   and windows.
+- If the prompt marks a repository dirty while `git status` is clean, Oh My Zsh
+  may be counting a commit change in an ignored submodule. Set
+  `GIT_STATUS_IGNORE_SUBMODULES=git` in the current session or a Zsh rc file to
+  make it follow Git's policy.
 
 ## Optional Zsh features
 
