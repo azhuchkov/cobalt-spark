@@ -61,8 +61,9 @@ the theme. It does not reproduce Oh My Zsh configuration options or plugins.
 
 - Set `COBALT_SPARK_THEME_PROMPT_SIGN` before loading the theme to use a
   different prompt anchor, for example `COBALT_SPARK_THEME_PROMPT_SIGN=' % '`.
-- Set `COBALT_SPARK_THEME_PARENT_CAP` to change the maximum parent-directory
-  prefix length. Set it to `0` to hide the parent directory.
+- `COBALT_SPARK_THEME_PARENT_CAP` controls how many leading characters of the
+  parent directory name are retained when it is abbreviated. Set it to `0`
+  to hide the parent directory entirely.
 - Enable the Oh My Zsh `virtualenv` plugin to show the active Python
   environment. The standalone loader handles this without a plugin.
 

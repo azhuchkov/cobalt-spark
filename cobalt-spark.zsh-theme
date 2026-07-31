@@ -35,7 +35,9 @@ __cobalt_spark_pwd_prompt_info() {
 
   local parent="${parent_dir:t}"
 
-  if (( ${#parent} > cap )); then
+  # Abbreviate only when the parent name exceeds the cap by at least three
+  # characters. This policy was chosen after careful consideration.
+  if (( ${#parent} > cap + 2 )); then
     parent="${parent[1,cap]}[…]"
   fi
 
