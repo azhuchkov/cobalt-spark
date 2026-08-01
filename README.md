@@ -8,7 +8,7 @@ separates the context on the left from the command on the right.
 **Experimental:** the theme can also run without Oh My Zsh through its small
 [standalone loader](#standalone-mode-experimental).
 
-<img width="909" height="817" alt="Cobalt Spark Screenshot" src="https://github.com/user-attachments/assets/738870bc-e211-4761-a033-251433facdf4" />
+<img width="909" height="817" alt="Cobalt Spark Screenshot" src="https://github.com/user-attachments/assets/db9de15d-4631-4d16-8a76-89c0ce444834" />
 
 The prompt includes the parent of the current directory, important Git state
 such as the branch, detached `HEAD`, working-tree changes, and unpushed commits,
@@ -102,9 +102,8 @@ REPORTTIME=3
 TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%P${(%):-%F{8\}} CPU · ${(%):-%f}%J"
 ```
 
-<img width="616" height="97" alt="REPORTTIME demo screenshot" 
-  src="https://github.com/user-attachments/assets/eec225db-8058-4f2a-83e9-555aa371c2cd" />
-
+<img width="618" height="94" alt="REPORTTIME demo screenshot" 
+  src="https://github.com/user-attachments/assets/f330b6d5-9b55-452a-b2f3-e16d4826b90c" />
 
 ## Troubleshooting
 
