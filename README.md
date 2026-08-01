@@ -69,11 +69,13 @@ the theme. It does not reproduce Oh My Zsh configuration options or plugins.
 
 ## Recommended setup
 
-Use a dark terminal color scheme, such as
-[One Dark](https://github.com/atom/one-dark-syntax) or
-[Catppuccin Macchiato](https://catppuccin.com/palette/), and a font that
-renders the lightning sign. Most [Nerd Fonts](https://www.nerdfonts.com/) work;
-[JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip)
+Use a dark terminal color scheme, such as [Tokyo Night](https://github.com/tokyo-night/tokyo-night-vscode-theme#other-ports) 
+(used in the screenshots), [Catppuccin Macchiato](https://catppuccin.com/ports/?c=terminal), 
+or [One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal)—the latter is particularly well suited 
+to extended terminal use.
+
+Use a font that includes the lightning bolt (`⚡`). Most [Nerd Fonts](https://www.nerdfonts.com/) work; 
+[JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip) 
 is recommended.
 
 ## Tips & Tricks
