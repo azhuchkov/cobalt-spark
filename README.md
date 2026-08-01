@@ -76,25 +76,7 @@ renders the lightning sign. Most [Nerd Fonts](https://www.nerdfonts.com/) work;
 [JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip)
 is recommended.
 
-## Troubleshooting
-
-- If prompt symbols do not render correctly, see the
-  [Oh My Zsh FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues)
-  for help with font issues.
-- If the prompt shows an unexpectedly high shell level inside `tmux`, add
-  `set-environment -gu SHLVL` to `~/.tmux.conf`. For an already running tmux
-  server, run `tmux set-environment -gu SHLVL`; the fix applies to new panes
-  and windows.
-- If the prompt marks a repository dirty while `git status` is clean, Oh My Zsh
-  may be counting a commit change in an ignored submodule. Set
-  `GIT_STATUS_IGNORE_SUBMODULES=git` in the current session or a Zsh rc file to
-  make it follow Git's policy.
-- If the Git segment is slow in a large repository, learn about Git's
-  [`core.untrackedCache`](https://git-scm.com/docs/git-update-index#_untracked_cache)
-  and built-in
-  [`core.fsmonitor`](https://git-scm.com/docs/git-fsmonitor--daemon).
-
-## Optional Zsh features
+## Tips & Tricks
 
 ### Command correction
 
@@ -119,3 +101,25 @@ usage, and the command. It also controls the output of Zsh's `time` keyword:
 REPORTTIME=3
 TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%P${(%):-%F{8\}} CPU · ${(%):-%f}%J"
 ```
+
+## Troubleshooting
+
+- If prompt symbols do not render correctly, see the
+  [Oh My Zsh FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues)
+  for help with font issues.
+- If the prompt shows an unexpectedly high shell level inside `tmux`, add
+  `set-environment -gu SHLVL` to `~/.tmux.conf`. For an already running tmux
+  server, run `tmux set-environment -gu SHLVL`; the fix applies to new panes
+  and windows.
+- If the prompt marks a repository dirty while `git status` is clean, Oh My Zsh
+  may be counting a commit change in an ignored submodule. Set
+  `GIT_STATUS_IGNORE_SUBMODULES=git` in the current session or a Zsh rc file to
+  make it follow Git's policy.
+- If the Git segment is slow in a large repository, learn about Git's
+  [`core.untrackedCache`](https://git-scm.com/docs/git-update-index#_untracked_cache)
+  and built-in
+  [`core.fsmonitor`](https://git-scm.com/docs/git-fsmonitor--daemon).
+
+## License
+
+Licensed under the [MIT License](LICENSE).
