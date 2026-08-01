@@ -10,6 +10,9 @@ separates the context on the left from the command on the right.
 
 <img width="909" height="817" alt="Cobalt Spark Screenshot" src="https://github.com/user-attachments/assets/db9de15d-4631-4d16-8a76-89c0ce444834" />
 
+For comparison, see the 
+[same terminal session rendered with the `robbyrussell` theme](https://github.com/user-attachments/assets/4fb99803-1190-4559-811c-4be0e91b82d0).
+
 The prompt includes the parent of the current directory, important Git state
 such as the branch, detached `HEAD`, working-tree changes, and unpushed commits,
 and Python's virtual environment via the `virtualenv` plugin. It also indicates
