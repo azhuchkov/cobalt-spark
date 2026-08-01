@@ -102,6 +102,10 @@ REPORTTIME=3
 TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%P${(%):-%F{8\}} CPU · ${(%):-%f}%J"
 ```
 
+<img width="616" height="97" alt="REPORTTIME demo screenshot" 
+  src="https://github.com/user-attachments/assets/eec225db-8058-4f2a-83e9-555aa371c2cd" />
+
+
 ## Troubleshooting
 
 - If prompt symbols do not render correctly, see the
