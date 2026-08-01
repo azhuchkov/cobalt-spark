@@ -80,7 +80,10 @@ _omz_git_prompt_info() {
     fi
   else
     mark=$(parse_git_dirty)
-    if [[ "$mark" == "$ZSH_THEME_GIT_PROMPT_CLEAN" ]] && (( ! detached )); then
+    if [[ "$mark" != "$ZSH_THEME_GIT_PROMPT_CLEAN" ]] &&
+        ! __git_prompt_git diff --quiet --diff-filter=U; then
+      mark="%F{9}*%F{109}"
+    elif [[ "$mark" == "$ZSH_THEME_GIT_PROMPT_CLEAN" ]] && (( ! detached )); then
       ahead=$(__git_prompt_git rev-list --count '@{u}..HEAD' 2>/dev/null)
       (( ahead > 0 )) && mark="%F{152}↑${ahead:#1}%F{109}"
     fi
