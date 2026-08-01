@@ -89,6 +89,10 @@ is recommended.
   may be counting a commit change in an ignored submodule. Set
   `GIT_STATUS_IGNORE_SUBMODULES=git` in the current session or a Zsh rc file to
   make it follow Git's policy.
+- If the Git segment is slow in a large repository, learn about Git's
+  [`core.untrackedCache`](https://git-scm.com/docs/git-update-index#_untracked_cache)
+  and built-in
+  [`core.fsmonitor`](https://git-scm.com/docs/git-fsmonitor--daemon).
 
 ## Optional Zsh features
 
