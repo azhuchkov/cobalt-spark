@@ -58,8 +58,8 @@ Zsh.
 
 To load it with a plugin manager (for example, Zinit, Antidote, or Antigen),
 add `azhuchkov/cobalt-spark` in its usual `user/repo` format and
-follow the manager's installation documentation. Managers that support the
-Zsh Plugin Standard discover `cobalt-spark.plugin.zsh` automatically.
+follow the manager's installation documentation. Managers supporting common
+Zsh plugin conventions discover and load the theme automatically.
 
 To load it directly, clone it anywhere convenient:
 
