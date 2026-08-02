@@ -43,6 +43,13 @@ ZSH_THEME_RANDOM_CANDIDATES=(
 )
 ```
 
+To show the active Python environment, add the Oh My Zsh `virtualenv` plugin
+to the existing plugin list in `~/.zshrc`, for example:
+
+```zsh
+plugins=(git virtualenv)
+```
+
 ## Standalone mode (experimental)
 
 To try the theme with plain Zsh, clone it anywhere convenient:
@@ -67,8 +74,6 @@ the theme. It does not reproduce Oh My Zsh configuration options or plugins.
 - `COBALT_SPARK_THEME_PARENT_CAP` controls how many leading characters of the
   parent directory name are retained when it is abbreviated. Set it to `0`
   to hide the parent directory entirely.
-- Enable the Oh My Zsh `virtualenv` plugin to show the active Python
-  environment. The standalone loader handles this without a plugin.
 
 ## Recommended setup
 
@@ -114,7 +119,8 @@ TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%
 
 - If prompt symbols do not render correctly, see the
   [Oh My Zsh FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues)
-  for help with font issues.
+  for help with font issues. You can also adjust the prompt symbols using the
+  available [configuration options](#configuration).
 - If the prompt shows an unexpectedly high shell level inside `tmux`, add
   `set-environment -gu SHLVL` to `~/.tmux.conf`. For an already running tmux
   server, run `tmux set-environment -gu SHLVL`; the fix applies to new panes
