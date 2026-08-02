@@ -121,6 +121,10 @@ TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%
   [Oh My Zsh FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues)
   for help with font issues. You can also adjust the prompt symbols using the
   available [configuration options](#configuration).
+- If **iTerm2** adds a triangle beside each prompt, turn off
+  [**Show mark indicators**](https://iterm2.com/documentation-preferences-profiles-terminal.html)
+  under **Settings → Profiles → Terminal** so it does not interfere with the
+  theme's prompt.
 - If the prompt shows an unexpectedly high shell level inside `tmux`, add
   `set-environment -gu SHLVL` to `~/.tmux.conf`. For an already running tmux
   server, run `tmux set-environment -gu SHLVL`; the fix applies to new panes
