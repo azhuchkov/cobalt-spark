@@ -7,8 +7,8 @@ separates the context on the left from the command on the right.
 
 **Experimental:** the theme also follows the
 [Zsh Plugin Standard](https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html)
-and can run without Oh My Zsh through its small
-[plugin entry point](#standalone-mode-experimental).
+and can run without Oh My Zsh through its
+[standalone entry point](#standalone-mode-experimental).
 
 <img width="909" height="817" alt="Cobalt Spark Screenshot" src="https://github.com/user-attachments/assets/db9de15d-4631-4d16-8a76-89c0ce444834" />
 
@@ -58,11 +58,11 @@ Outside Oh My Zsh, load the theme through a plugin manager or directly from
 Zsh.
 
 To load it with a plugin manager (for example, Zinit, Antidote, or Antigen),
-add `azhuchkov/cobalt-spark` in its usual `user/repo` format and
-follow the manager's installation documentation. Managers supporting common
-Zsh plugin conventions discover and load the theme automatically.
+add `azhuchkov/cobalt-spark` according to the manager's plugin installation 
+documentation. Managers supporting common Zsh plugin conventions discover 
+and load the theme automatically.
 
-To load it directly, clone it anywhere convenient:
+To load it without a manager, clone it anywhere convenient:
 
 ```sh
 git clone https://github.com/azhuchkov/cobalt-spark.git ~/.cobalt-spark
