@@ -5,8 +5,9 @@ typical command output, such as `ls` listings. A prominent lightning anchor
 makes command lines easy to find while scanning the screen and visually
 separates the context on the left from the command on the right.
 
-**Experimental:** the theme also follows the Zsh Plugin Standard and can run
-without Oh My Zsh through its small
+**Experimental:** the theme also follows the
+[Zsh Plugin Standard](https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html)
+and can run without Oh My Zsh through its small
 [plugin entry point](#standalone-mode-experimental).
 
 <img width="909" height="817" alt="Cobalt Spark Screenshot" src="https://github.com/user-attachments/assets/db9de15d-4631-4d16-8a76-89c0ce444834" />
