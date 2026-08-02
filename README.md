@@ -5,8 +5,9 @@ typical command output, such as `ls` listings. A prominent lightning anchor
 makes command lines easy to find while scanning the screen and visually
 separates the context on the left from the command on the right.
 
-**Experimental:** the theme can also run without Oh My Zsh through its small
-[standalone loader](#standalone-mode-experimental).
+**Experimental:** the theme also follows the Zsh Plugin Standard and can run
+without Oh My Zsh through its small
+[plugin entry point](#standalone-mode-experimental).
 
 <img width="909" height="817" alt="Cobalt Spark Screenshot" src="https://github.com/user-attachments/assets/db9de15d-4631-4d16-8a76-89c0ce444834" />
 
@@ -58,14 +59,18 @@ To try the theme with plain Zsh, clone it anywhere convenient:
 git clone https://github.com/azhuchkov/cobalt-spark.git ~/.cobalt-spark
 ```
 
-Then source the standalone loader from `~/.zshrc`:
+Then source the standard plugin entry point from `~/.zshrc`:
 
 ```zsh
-source ~/.cobalt-spark/cobalt-spark.zsh
+source ~/.cobalt-spark/cobalt-spark.plugin.zsh
 ```
 
-The loader provides only the Git and virtual-environment helpers required by
-the theme. It does not reproduce Oh My Zsh configuration options or plugins.
+Plugin managers that support the
+[Zsh Plugin Standard](https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html)
+can discover this entry point automatically.
+
+Standalone mode provides only the Git and virtual-environment helpers required
+by the theme. It does not reproduce Oh My Zsh configuration options or plugins.
 
 ## Configuration
 
