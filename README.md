@@ -53,7 +53,15 @@ plugins=(git virtualenv)
 
 ## Standalone mode (experimental)
 
-To try the theme with plain Zsh, clone it anywhere convenient:
+Outside Oh My Zsh, load the theme through a plugin manager or directly from
+Zsh.
+
+To load it with a plugin manager (for example, Zinit, Antidote, or Antigen),
+add `azhuchkov/cobalt-spark` in its usual `user/repo` format and
+follow the manager's installation documentation. Managers that support the
+Zsh Plugin Standard discover `cobalt-spark.plugin.zsh` automatically.
+
+To load it directly, clone it anywhere convenient:
 
 ```sh
 git clone https://github.com/azhuchkov/cobalt-spark.git ~/.cobalt-spark
@@ -64,13 +72,6 @@ Then source the standard plugin entry point from `~/.zshrc`:
 ```zsh
 source ~/.cobalt-spark/cobalt-spark.plugin.zsh
 ```
-
-Plugin managers that support the
-[Zsh Plugin Standard](https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html)
-can discover this entry point automatically.
-
-Standalone mode provides only the Git and virtual-environment helpers required
-by the theme. It does not reproduce Oh My Zsh configuration options or plugins.
 
 ## Configuration
 
