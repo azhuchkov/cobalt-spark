@@ -55,18 +55,6 @@ to the existing plugin list in `~/.zshrc`, for example:
 plugins=(git virtualenv)
 ```
 
-Optionally, you can
-[bind](https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins)
-a hotkey to quickly copy the current working directory:
-
-```zsh
-# Press Ctrl+X, then Ctrl+P to copy the CWD
-bindkey -M emacs '^X^P' cobalt-spark-copy-cwd
-```
-
-For best compatibility with other plugins, place this binding near the end of
-`~/.zshrc`.
-
 ## Standalone mode (experimental)
 
 Outside Oh My Zsh, load the theme through a plugin manager or directly from
@@ -88,6 +76,20 @@ Then source the standard plugin entry point from `~/.zshrc`:
 ```zsh
 source ~/.cobalt-spark/cobalt-spark.plugin.zsh
 ```
+
+## Optional setup
+
+Optionally, you can
+[bind](https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins)
+a hotkey to quickly copy the current working directory:
+
+```zsh
+# Press Ctrl+X, then Ctrl+P to copy the CWD
+bindkey -M emacs '^X^P' cobalt-spark-copy-cwd
+```
+
+For best compatibility with other plugins, place this binding near the end of
+`~/.zshrc`.
 
 ## Configuration
 
