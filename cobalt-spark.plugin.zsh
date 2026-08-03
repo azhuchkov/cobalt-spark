@@ -4,6 +4,29 @@ typeset -g COBALT_SPARK_PLUGIN_FILE="${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"
 COBALT_SPARK_PLUGIN_FILE="${${(M)COBALT_SPARK_PLUGIN_FILE:#/*}:-$PWD/$COBALT_SPARK_PLUGIN_FILE}"
 COBALT_SPARK_PLUGIN_FILE="${COBALT_SPARK_PLUGIN_FILE:A}"
 
+clipcopy() {
+  # Send stdin to the first available clipboard backend.
+  # Redirect forking backends so their children cannot hold ZLE capture open.
+
+  # macOS
+  if (( $+commands[pbcopy] )); then
+    command pbcopy
+  # Windows Subsystem for Linux
+  elif (( $+commands[clip.exe] )); then
+    command clip.exe
+  # wl-copy may be installed outside Wayland, so check for an active session.
+  elif [[ -n ${WAYLAND_DISPLAY-} ]] && (( $+commands[wl-copy] )); then
+    command cat | command wl-copy &>/dev/null
+  # X11, preferring xclip over xsel
+  elif (( $+commands[xclip] )); then
+    command cat | command xclip -selection clipboard -in &>/dev/null
+  elif (( $+commands[xsel] )); then
+    command xsel --clipboard --input
+  else
+    return 1
+  fi
+}
+
 __git_prompt_git() {
   command git "$@"
 }

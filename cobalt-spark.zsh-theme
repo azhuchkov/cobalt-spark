@@ -164,3 +164,21 @@ RPS2='%F{8}(${__cobalt_spark_continuation_labels[${(%):-%1^}]:-continuing: ${(%)
 PROMPT_EOL_MARK='%F{244}↵%f'
 # Used if CORRECT option is set
 SPROMPT='Fix %F{red}%B%R%b%f → %F{green}%B%r%b%f? ([N]o, [y]es, [a]bort, [e]dit): '
+
+# Copy-CWD widget for ZLE
+cobalt-spark-copy-cwd() {
+  local error
+  local message='Copy failed'
+
+  if error=$(print -rn -- "$PWD" | clipcopy 2>&1); then
+    return 0
+  fi
+
+  error=${error%%$'\n'*}
+  [[ -n $error ]] && message+=": ${error[1,120]}"
+
+  zle -M "$message"
+  return 1
+}
+
+zle -N cobalt-spark-copy-cwd

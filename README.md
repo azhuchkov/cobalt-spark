@@ -20,6 +20,9 @@ such as the branch, detached `HEAD`, working-tree changes, and unpushed commits,
 and Python's virtual environment via the `virtualenv` plugin. It also indicates
 nested shells and background jobs when present.
 
+The theme also supports an optional hotkey for copying the current working
+directory.
+
 ## Installation
 
 Clone the repository into the Oh My Zsh custom themes directory:
@@ -51,6 +54,18 @@ to the existing plugin list in `~/.zshrc`, for example:
 ```zsh
 plugins=(git virtualenv)
 ```
+
+Optionally, you can
+[bind](https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins)
+a hotkey to quickly copy the current working directory:
+
+```zsh
+# Press Ctrl+X, then Ctrl+P to copy the CWD
+bindkey -M emacs '^X^P' cobalt-spark-copy-cwd
+```
+
+For best compatibility with other plugins, place this binding near the end of
+`~/.zshrc`.
 
 ## Standalone mode (experimental)
 
@@ -144,6 +159,9 @@ TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%
   [`core.untrackedCache`](https://git-scm.com/docs/git-update-index#_untracked_cache)
   and built-in
   [`core.fsmonitor`](https://git-scm.com/docs/git-fsmonitor--daemon).
+- If you see `zsh-syntax-highlighting: unhandled ZLE widget 'cobalt-spark-copy-cwd'`,
+  move the binding of the hotkey toward the end of `~/.zshrc`, after all plugins are
+  loaded; the warning itself is harmless.
 
 ## License
 
