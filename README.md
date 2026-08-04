@@ -15,13 +15,18 @@ and can run without Oh My Zsh through its
 For comparison, see the 
 [same terminal session rendered with the `robbyrussell` theme](https://github.com/user-attachments/assets/4fb99803-1190-4559-811c-4be0e91b82d0).
 
-The prompt includes the parent of the current directory, important Git state
-such as the branch, detached `HEAD`, working-tree changes, and unpushed commits,
-and Python's virtual environment via the `virtualenv` plugin. It also indicates
-nested shells and background jobs when present.
+## Overview
 
-The theme also supports an optional hotkey for copying the current working
-directory.
+- Compact working-directory display with the current directory and an
+abbreviated parent.
+- Git context including the current branch or detached `HEAD`, working-tree
+changes, operations in progress, and unpushed commits.
+- Command and pipeline status indication.
+- Python virtual environments, nested shell levels, and background jobs when
+present.
+- Informative continuation prompts for incomplete multiline commands.
+- An optional hotkey for copying the current working directory.
+- Support for both Oh My Zsh and standalone Zsh setups.
 
 ## Installation
 
