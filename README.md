@@ -5,11 +5,6 @@ colors keep essential context visible without competing with command output,
 while a prominent lightning anchor makes command lines easy to find when
 scanning the terminal.
 
-**Experimental:** the theme also follows the
-[Zsh Plugin Standard](https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html)
-and can run without Oh My Zsh through its
-[standalone entry point](#standalone-mode-experimental).
-
 <img width="909" height="817" alt="Cobalt Spark Screenshot" src="https://github.com/user-attachments/assets/db9de15d-4631-4d16-8a76-89c0ce444834" />
 
 For comparison, see the 
@@ -47,10 +42,14 @@ Then select the theme in `~/.zshrc`:
 ZSH_THEME="cobalt-spark/cobalt-spark"
 ```
 
-### Standalone mode (experimental)
+### Standalone mode
 
 Outside Oh My Zsh, load the theme through a plugin manager or directly from
-Zsh.
+Zsh. The standalone entry point follows the
+[Zsh Plugin Standard](https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html).
+
+> Standalone support is newer and has received less real-world testing than the
+Oh My Zsh integration.
 
 To load it with a plugin manager (for example, Zinit, Antidote, or Antigen),
 add `azhuchkov/cobalt-spark` according to the manager's plugin installation 
