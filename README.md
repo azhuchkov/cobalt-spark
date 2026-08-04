@@ -7,7 +7,7 @@ scanning the terminal.
 
 <img width="909" height="817" alt="Cobalt Spark Screenshot" src="https://github.com/user-attachments/assets/db9de15d-4631-4d16-8a76-89c0ce444834" />
 
-For comparison, see the 
+For comparison, see the
 [same terminal session rendered with the `robbyrussell` theme](https://github.com/user-attachments/assets/4fb99803-1190-4559-811c-4be0e91b82d0).
 
 ## Overview
@@ -109,13 +109,13 @@ For best compatibility with other plugins, place this binding near the end of
 
 ## Terminal setup
 
-Use a dark terminal color scheme, such as [Tokyo Night](https://github.com/tokyo-night/tokyo-night-vscode-theme#other-ports) 
-(used in the screenshots), [Catppuccin Macchiato](https://catppuccin.com/ports/?c=terminal), 
-or [One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal)—the latter is particularly well suited 
+Use a dark terminal color scheme, such as [Tokyo Night](https://github.com/tokyo-night/tokyo-night-vscode-theme#other-ports)
+(used in the screenshots), [Catppuccin Macchiato](https://catppuccin.com/ports/?c=terminal),
+or [One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal)—the latter is particularly well suited
 to extended terminal use.
 
-Use a font that includes the lightning bolt (`⚡`). Most [Nerd Fonts](https://www.nerdfonts.com/) work; 
-[JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip) 
+Use a font that includes the lightning bolt (`⚡`). Most [Nerd Fonts](https://www.nerdfonts.com/) work;
+[JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip)
 is recommended.
 
 ## Tips & Tricks
@@ -144,7 +144,7 @@ REPORTTIME=3
 TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%P${(%):-%F{8\}} CPU · ${(%):-%f}%J"
 ```
 
-<img width="618" height="94" alt="REPORTTIME demo screenshot" 
+<img width="618" height="94" alt="REPORTTIME demo screenshot"
   src="https://github.com/user-attachments/assets/f330b6d5-9b55-452a-b2f3-e16d4826b90c" />
 
 ## Troubleshooting
