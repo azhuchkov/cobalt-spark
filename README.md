@@ -46,7 +46,7 @@ ZSH_THEME="cobalt-spark/cobalt-spark"
 
 The theme also follows the
 [Zsh Plugin Standard](https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html),
-so it can be loaded using popular plugin managers like Zinit, Antidote, or Antigen.
+so it can be loaded using popular plugin managers like Zinit, Antigen, or zplug.
 
 > This installation method is newer and has received less real-world testing
 > than the Oh My Zsh integration.
@@ -54,6 +54,24 @@ so it can be loaded using popular plugin managers like Zinit, Antidote, or Antig
 Add `azhuchkov/cobalt-spark` using your plugin manager's installation syntax.
 Managers that support standard Zsh plugin conventions should automatically
 load `cobalt-spark.plugin.zsh`.
+
+For Zinit, add this to `~/.zshrc`:
+
+```zsh
+zinit light azhuchkov/cobalt-spark
+```
+
+For Antigen, add this before `antigen apply` in `~/.zshrc`:
+
+```zsh
+antigen bundle azhuchkov/cobalt-spark --branch=main
+```
+
+For zplug, add this before `zplug check` and `zplug load` in `~/.zshrc`:
+
+```zsh
+zplug "azhuchkov/cobalt-spark"
+```
 
 ### Direct installation
 
