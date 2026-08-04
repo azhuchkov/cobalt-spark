@@ -124,15 +124,16 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%F{blue})%f"
 ZSH_THEME_GIT_PROMPT_DIRTY="%F{152}*%F{109}"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
+# U+FE0E requests text presentation so iTerm does not reserve an emoji cell.
+typeset -g __cobalt_spark_default_prompt_sign=$' \u26A1\uFE0E'
+# GNU Screen may suppress the preceding glyph when handling U+FE0E.
+[[ -n ${STY:-} ]] && __cobalt_spark_default_prompt_sign=$' \u26A1'
+
 PROMPT='%f%k%b%u%s'
 PROMPT+='${__cobalt_spark_pipeline_color}%(?..%F{9})•'
 (( SHLVL > 1 )) && PROMPT+=' %F{244}[%F{109}$SHLVL%F{244}]'
 PROMPT+=' %B%F{75}$(__cobalt_spark_pwd_prompt_info)%f%b'
 PROMPT+='$(git_prompt_info)'
-# U+FE0E requests text presentation so iTerm does not reserve an emoji cell.
-typeset -g __cobalt_spark_default_prompt_sign=$' \u26A1\uFE0E'
-# GNU Screen may suppress the preceding glyph when handling U+FE0E.
-[[ -n ${STY:-} ]] && __cobalt_spark_default_prompt_sign=$' \u26A1'
 PROMPT+='%B%F{178}${${COBALT_SPARK_THEME_PROMPT_SIGN-$__cobalt_spark_default_prompt_sign}//\%/%%}%f%b'
 
 ZSH_THEME_VIRTUALENV_PREFIX="%F{244}[%F{blue}"
