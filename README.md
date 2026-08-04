@@ -1,9 +1,9 @@
 # Cobalt Spark
 
-A compact Oh My Zsh theme that uses restrained colors to avoid competing with
-typical command output, such as `ls` listings. A prominent lightning anchor
-makes command lines easy to find while scanning the screen and visually
-separates the context on the left from the command on the right.
+Cobalt Spark is a compact Zsh theme designed for everyday work. Restrained
+colors keep essential context visible without competing with command output,
+while a prominent lightning anchor makes command lines easy to find when
+scanning the terminal.
 
 **Experimental:** the theme also follows the
 [Zsh Plugin Standard](https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html)
