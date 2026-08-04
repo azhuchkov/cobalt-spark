@@ -21,11 +21,11 @@ changes, operations in progress, and unpushed commits.
 present.
 - Informative continuation prompts for incomplete multiline commands.
 - An optional hotkey for copying the current working directory.
-- Support for both Oh My Zsh and standalone Zsh setups.
+- Works with Oh My Zsh, Zsh plugin managers, and direct sourcing.
 
 ## Installation
 
-There are two ways to install the theme: with Oh My Zsh or in standalone mode.
+Choose the installation method that matches your Zsh setup.
 
 ### Oh My Zsh
 
@@ -42,21 +42,22 @@ Then select the theme in `~/.zshrc`:
 ZSH_THEME="cobalt-spark/cobalt-spark"
 ```
 
-### Standalone mode
+### Zsh plugin managers
 
-Outside Oh My Zsh, load the theme through a plugin manager or directly from
-Zsh. The standalone entry point follows the
-[Zsh Plugin Standard](https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html).
+The theme also follows the
+[Zsh Plugin Standard](https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html),
+so it can be loaded using popular plugin managers like Zinit, Antidote, or Antigen.
 
-> Standalone support is newer and has received less real-world testing than the
-Oh My Zsh integration.
+> This installation method is newer and has received less real-world testing
+> than the Oh My Zsh integration.
 
-To load it with a plugin manager (for example, Zinit, Antidote, or Antigen),
-add `azhuchkov/cobalt-spark` according to the manager's plugin installation 
-documentation. Managers supporting common Zsh plugin conventions discover 
-and load the theme automatically.
+Add `azhuchkov/cobalt-spark` using your plugin manager's installation syntax.
+Managers that support standard Zsh plugin conventions should automatically
+load `cobalt-spark.plugin.zsh`.
 
-To load it without a manager, clone it anywhere convenient:
+### Direct installation
+
+Clone the repository anywhere convenient:
 
 ```sh
 git clone https://github.com/azhuchkov/cobalt-spark.git ~/.cobalt-spark
@@ -74,14 +75,15 @@ Cobalt Spark works without additional configuration. The following settings are 
 
 ### Python virtual environments
 
-To show the active Python environment, add the Oh My Zsh `virtualenv` plugin
-to the existing plugin list in `~/.zshrc`, for example:
+In standalone setups, Cobalt Spark detects the active Python environment
+automatically.
+
+When using Oh My Zsh, enable its `virtualenv` plugin by adding it to the
+existing plugin list in `~/.zshrc`, for example:
 
 ```zsh
 plugins=(git virtualenv)
 ```
-
-Standalone mode detects the environment automatically.
 
 ### Quickly copy the current directory
 
@@ -147,10 +149,10 @@ TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%
 
 ## Troubleshooting
 
-- If prompt symbols do not render correctly, see the
-  [Oh My Zsh FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues)
-  for help with font issues. You can also adjust the prompt symbols using the
-  available [theme options](#theme-options).
+- If prompt symbols do not render correctly, make sure the font selected in
+  your terminal contains the lightning bolt (⚡); see
+  [Terminal setup](#terminal-setup). You can also replace the prompt anchor
+  using the available [theme options](#theme-options).
 - If **iTerm2** adds a triangle beside each prompt, turn off
   [**Show mark indicators**](https://iterm2.com/documentation-preferences-profiles-terminal.html)
   under **Settings → Profiles → Terminal** so it does not interfere with the
@@ -159,10 +161,10 @@ TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%
   `set-environment -gu SHLVL` to `~/.tmux.conf`. For an already running tmux
   server, run `tmux set-environment -gu SHLVL`; the fix applies to new panes
   and windows.
-- If the prompt marks a repository dirty while `git status` is clean, Oh My Zsh
-  may be counting a commit change in an ignored submodule. Set
-  `GIT_STATUS_IGNORE_SUBMODULES=git` in the current session or a Zsh rc file to
-  make it follow Git's policy.
+- When using Oh My Zsh, if the prompt marks a repository dirty while
+  `git status` is clean, Oh My Zsh may be counting a commit change in an
+  ignored submodule. Set `GIT_STATUS_IGNORE_SUBMODULES=git` in the current
+  session or a Zsh startup file to make it follow Git's policy.
 - If the Git segment is slow in a large repository, learn about Git's
   [`core.untrackedCache`](https://git-scm.com/docs/git-update-index#_untracked_cache)
   and built-in
