@@ -25,6 +25,10 @@ directory.
 
 ## Installation
 
+There are two ways to install the theme: with Oh My Zsh or in standalone mode.
+
+### Oh My Zsh
+
 Clone the repository into the Oh My Zsh custom themes directory:
 
 ```sh
@@ -38,24 +42,7 @@ Then select the theme in `~/.zshrc`:
 ZSH_THEME="cobalt-spark/cobalt-spark"
 ```
 
-To compare it with another theme using Oh My Zsh's random theme selection:
-
-```sh
-ZSH_THEME="random"
-ZSH_THEME_RANDOM_CANDIDATES=(
-  "cobalt-spark/cobalt-spark"
-  "robbyrussell"
-)
-```
-
-To show the active Python environment, add the Oh My Zsh `virtualenv` plugin
-to the existing plugin list in `~/.zshrc`, for example:
-
-```zsh
-plugins=(git virtualenv)
-```
-
-## Standalone mode (experimental)
+### Standalone mode (experimental)
 
 Outside Oh My Zsh, load the theme through a plugin manager or directly from
 Zsh.
@@ -77,7 +64,22 @@ Then source the standard plugin entry point from `~/.zshrc`:
 source ~/.cobalt-spark/cobalt-spark.plugin.zsh
 ```
 
-## Optional setup
+## Configuration
+
+Cobalt Spark works without additional configuration. The following settings are optional.
+
+### Python virtual environments
+
+To show the active Python environment, add the Oh My Zsh `virtualenv` plugin
+to the existing plugin list in `~/.zshrc`, for example:
+
+```zsh
+plugins=(git virtualenv)
+```
+
+Standalone mode detects the environment automatically.
+
+### Quickly copy the current directory
 
 Optionally, you can
 [bind](https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins)
@@ -91,15 +93,15 @@ bindkey -M emacs '^X^P' cobalt-spark-copy-cwd
 For best compatibility with other plugins, place this binding near the end of
 `~/.zshrc`.
 
-## Configuration
+### Theme options
 
-- Set `COBALT_SPARK_THEME_PROMPT_SIGN` before loading the theme to use a
-  different prompt anchor, for example `COBALT_SPARK_THEME_PROMPT_SIGN=' % '`.
 - `COBALT_SPARK_THEME_PARENT_CAP` controls how many leading characters of the
   parent directory name are retained when it is abbreviated. Set it to `0`
   to hide the parent directory entirely.
+- Set `COBALT_SPARK_THEME_PROMPT_SIGN` before loading the theme to use a
+  different prompt anchor, for example `COBALT_SPARK_THEME_PROMPT_SIGN=' % '`.
 
-## Recommended setup
+## Terminal setup
 
 Use a dark terminal color scheme, such as [Tokyo Night](https://github.com/tokyo-night/tokyo-night-vscode-theme#other-ports) 
 (used in the screenshots), [Catppuccin Macchiato](https://catppuccin.com/ports/?c=terminal), 
@@ -144,7 +146,7 @@ TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%
 - If prompt symbols do not render correctly, see the
   [Oh My Zsh FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#font-issues)
   for help with font issues. You can also adjust the prompt symbols using the
-  available [configuration options](#configuration).
+  available [theme options](#theme-options).
 - If **iTerm2** adds a triangle beside each prompt, turn off
   [**Show mark indicators**](https://iterm2.com/documentation-preferences-profiles-terminal.html)
   under **Settings → Profiles → Terminal** so it does not interfere with the
