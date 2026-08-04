@@ -5,10 +5,10 @@ colors keep essential context visible without competing with command output,
 while a prominent lightning anchor makes command lines easy to find when
 scanning the terminal.
 
-<img width="909" height="817" alt="Cobalt Spark Screenshot" src="https://github.com/user-attachments/assets/db9de15d-4631-4d16-8a76-89c0ce444834" />
+<img width="909" height="817" alt="Cobalt Spark Screenshot" src="https://github.com/user-attachments/assets/05f2a056-0cfd-4874-9496-4ea1d35e4e41" />
 
 For comparison, see the
-[same terminal session rendered with the `robbyrussell` theme](https://github.com/user-attachments/assets/4fb99803-1190-4559-811c-4be0e91b82d0).
+[same terminal session rendered with the `robbyrussell` theme](https://github.com/user-attachments/assets/699dfd18-4705-4dcb-b219-f3afa44efc1e).
 
 ## Overview
 
@@ -163,7 +163,7 @@ TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%
 ```
 
 <img width="618" height="94" alt="REPORTTIME demo screenshot"
-  src="https://github.com/user-attachments/assets/f330b6d5-9b55-452a-b2f3-e16d4826b90c" />
+  src="https://github.com/user-attachments/assets/4a355afd-8259-49b0-bf68-bbc9c895225b" />
 
 ## Troubleshooting
 
