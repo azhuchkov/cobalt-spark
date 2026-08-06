@@ -129,8 +129,7 @@ For best compatibility with other plugins, place this binding near the end of
 
 Use a dark terminal color scheme, such as [Tokyo Night](https://github.com/tokyo-night/tokyo-night-vscode-theme#other-ports)
 (used in the screenshots), [Catppuccin Macchiato](https://catppuccin.com/ports/?c=terminal),
-or [One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal)—the latter is particularly well suited
-to extended terminal use.
+or [One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal)—the latter is particularly well suited to long terminal sessions.
 
 Use a font that includes the lightning bolt (`⚡`). Most [Nerd Fonts](https://www.nerdfonts.com/) work;
 [JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip)
