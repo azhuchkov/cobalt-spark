@@ -167,10 +167,9 @@ TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%
 
 ## Troubleshooting
 
-- If prompt symbols do not render correctly, make sure the font selected in
-  your terminal contains the lightning bolt (⚡); see
-  [Terminal setup](#terminal-setup). You can also replace the prompt anchor
-  using the available [theme options](#theme-options).
+- If prompt symbols do not render correctly, make sure you have configured a
+  suitable font in your terminal emulator; see [Terminal setup](#terminal-setup).
+  You can also replace the prompt anchor using [theme options](#theme-options).
 - If **iTerm2** adds a triangle beside each prompt, turn off
   [Show mark indicators](https://iterm2.com/documentation-preferences-profiles-terminal.html)
   under **Settings → Profiles → Terminal** so it does not interfere with the
