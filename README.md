@@ -10,6 +10,9 @@ scanning the terminal.
 For comparison, see the
 [same terminal session rendered with the `robbyrussell` theme](https://github.com/user-attachments/assets/699dfd18-4705-4dcb-b219-f3afa44efc1e).
 
+> **Live Git segment:** Cobalt Spark can refresh its Git context while the
+> prompt is idle. See [Live Git updates](#live-git-updates) for details.
+
 ## Overview
 
 - Compact working-directory display with the current directory and an
@@ -90,7 +93,9 @@ source ~/.cobalt-spark/cobalt-spark.plugin.zsh
 
 ## Configuration
 
-Cobalt Spark works without additional configuration. The following settings are optional.
+Cobalt Spark works without additional configuration. The settings below are
+shell variables; put persistent values in `~/.zshrc`. The live watcher reads
+its settings when it starts.
 
 ### Python virtual environments
 
@@ -103,6 +108,20 @@ existing plugin list in `~/.zshrc`, for example:
 ```zsh
 plugins=(git virtualenv)
 ```
+
+### Live Git updates
+
+When [fswatch](https://github.com/emcrisostomo/fswatch) is available, Cobalt
+Spark watches the current repository and updates the Git segment while the
+prompt is idle. Without fswatch, the Git segment still works but updates only
+when the prompt is rendered again.
+
+Set `COBALT_SPARK_THEME_LIVE_GIT_OFF` to a non-empty value to turn off live Git
+updates.
+
+The watcher latency defaults to 500 milliseconds. Set
+`COBALT_SPARK_THEME_LIVE_GIT_LATENCY` to configure it in seconds, for example
+`COBALT_SPARK_THEME_LIVE_GIT_LATENCY=1`.
 
 ### Quickly copy the current directory
 
@@ -123,8 +142,8 @@ For best compatibility with other plugins, place this binding near the end of
 - `COBALT_SPARK_THEME_PARENT_CAP` controls how many leading characters of the
   parent directory name are retained when it is abbreviated. Set it to `0`
   to hide the parent directory entirely.
-- Set `COBALT_SPARK_THEME_PROMPT_SIGN` before loading the theme to use a
-  different prompt anchor, for example `COBALT_SPARK_THEME_PROMPT_SIGN=' % '`.
+- Set `COBALT_SPARK_THEME_PROMPT_SIGN` to use a different prompt anchor, for
+  example `COBALT_SPARK_THEME_PROMPT_SIGN=' % '`.
 
 ## Terminal setup
 
@@ -204,6 +223,11 @@ to provide an early warning that your branch is behind its upstream.
   [`core.untrackedCache`](https://git-scm.com/docs/git-update-index#_untracked_cache)
   and built-in
   [`core.fsmonitor`](https://git-scm.com/docs/git-fsmonitor--daemon).
+- On BSD systems, the `fswatch` `kqueue` monitor uses one file descriptor per
+  watched file. If live Git updates appear incomplete in a large repository,
+  check the current soft and hard limits with `ulimit -Sn` and `ulimit -Hn`.
+  If appropriate for your system, set `ulimit -Sn hard` in your Zsh startup
+  file, then restart the shell or reload the theme.
 - If you see `zsh-syntax-highlighting: unhandled ZLE widget 'cobalt-spark-copy-cwd'`,
   move the binding of the hotkey toward the end of `~/.zshrc`, after all plugins are
   loaded; the warning itself is harmless.
