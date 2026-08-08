@@ -28,7 +28,7 @@ clipcopy() {
 }
 
 __git_prompt_git() {
-  command git "$@"
+  GIT_OPTIONAL_LOCKS=0 command git "$@"
 }
 
 parse_git_dirty() {
