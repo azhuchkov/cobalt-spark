@@ -164,6 +164,21 @@ TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%
 <img width="618" height="94" alt="REPORTTIME demo screenshot"
   src="https://github.com/user-attachments/assets/4a355afd-8259-49b0-bf68-bbc9c895225b" />
 
+### Git prefetch
+
+To let the prompt detect upstream changes before an explicit fetch, enable
+Git's built-in [maintenance](https://git-scm.com/docs/git-maintenance). Run
+this command from within the repository:
+
+```sh
+git maintenance start
+```
+
+Git will periodically prefetch changes and perform other housekeeping in the
+background. Prefetched changes are stored separately, so remote-tracking
+branches are not updated until you run `git fetch`. The prompt uses this data
+to provide an early warning that your branch is behind its upstream.
+
 ## Troubleshooting
 
 - If prompt symbols do not render correctly, make sure you have configured a

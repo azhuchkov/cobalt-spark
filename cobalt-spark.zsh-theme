@@ -52,7 +52,7 @@ __cobalt_spark_pwd_prompt_info() {
 # OMZ runs this producer in both synchronous and async git_prompt_info modes.
 _omz_git_prompt_info() {
   local IFS=$' \t\n'
-  local git_dir ref upstream mark relation ahead behind detached
+  local git_dir ref upstream upstream_ref mark relation ahead behind detached
 
   git_dir=$(__git_prompt_git rev-parse --git-dir 2>/dev/null) || return 0
   [[ "$(__git_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" == 1 ]] && return 0
@@ -89,6 +89,15 @@ _omz_git_prompt_info() {
         __git_prompt_git rev-list --left-right --count 'HEAD...@{u}' 2>/dev/null
       )"
       (( behind > 0 )) && relation=↓
+      if (( behind == 0 )) &&
+          upstream_ref=$(__git_prompt_git rev-parse --symbolic-full-name '@{u}' 2>/dev/null); then
+        # A force-push followed by an explicit fetch can leave this ref stale
+        # until the next prefetch and cause a false positive. Refresh it with
+        # `git maintenance run --task=prefetch`.
+        behind=$(__git_prompt_git rev-list --count --max-count=1 \
+          "HEAD..refs/prefetch/${upstream_ref#refs/}" 2>/dev/null) || behind=0
+        (( behind > 0 )) && relation=⇣
+      fi
       (( ahead > 0 )) && relation+="↑${ahead:#1}"
       [[ -n "$relation" ]] && mark="%F{152}${relation}%F{109}"
     fi
