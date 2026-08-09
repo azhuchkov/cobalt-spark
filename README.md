@@ -179,6 +179,9 @@ background. Prefetched changes are stored separately, so remote-tracking
 branches are not updated until you run `git fetch`. The prompt uses this data
 to provide an early warning that your branch is behind its upstream.
 
+<img width="594" height="71" alt="prefetch demo screenshot" 
+  src="https://github.com/user-attachments/assets/f1bf7317-ae75-45f4-9222-46521b7b75fb" />
+
 ## Troubleshooting
 
 - If prompt symbols do not render correctly, make sure you have configured a
