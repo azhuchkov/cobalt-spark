@@ -206,6 +206,10 @@ to provide an early warning that your branch is behind its upstream.
 - If you see `zsh-syntax-highlighting: unhandled ZLE widget 'cobalt-spark-copy-cwd'`,
   move the binding of the hotkey toward the end of `~/.zshrc`, after all plugins are
   loaded; the warning itself is harmless.
+- If upstream changes take longer than expected to appear in the prompt, note that
+  Git maintenance normally prefetches them *hourly*. Git versions before `2.45.3` may
+  stop processing repositories after the first maintenance failure, so upgrading
+  Git is recommended.
 
 ## License
 
