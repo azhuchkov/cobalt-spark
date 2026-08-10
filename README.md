@@ -15,7 +15,8 @@ For comparison, see the
 - Compact working-directory display with the current directory and an
 abbreviated parent.
 - Git context including the current branch or detached `HEAD`, working-tree
-changes, operations in progress, and upstream divergence.
+changes, operations in progress, upstream divergence, and `+` for unpublished
+commits.
 - Command and pipeline status indication.
 - Python virtual environments, nested shell levels, and background jobs when
 present.

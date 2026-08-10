@@ -53,9 +53,18 @@ __cobalt_spark_pwd_prompt_info() {
 _omz_git_prompt_info() {
   local IFS=$' \t\n'
   local git_dir ref upstream upstream_ref mark relation ahead behind detached
+  local config line hide_info has_remote divergence base
 
   git_dir=$(__git_prompt_git rev-parse --git-dir 2>/dev/null) || return 0
-  [[ "$(__git_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" == 1 ]] && return 0
+  config=$(__git_prompt_git config --get-regexp \
+    '^(oh-my-zsh\.hide-info|remote\..*\.)' 2>/dev/null) || config=
+  for line in "${(@f)config}"; do
+    case "$line" in
+      'oh-my-zsh.hide-info '*) hide_info=${line#* } ;;
+      remote.*.*) has_remote=1 ;;
+    esac
+  done
+  [[ "$hide_info" == 1 ]] && return 0
 
   if ! ref=$(__git_prompt_git symbolic-ref --short HEAD 2>/dev/null); then
     detached=1
@@ -85,20 +94,32 @@ _omz_git_prompt_info() {
         ! __git_prompt_git diff --quiet --diff-filter=U; then
       mark="%F{9}*%F{109}"
     elif [[ "$mark" == "$ZSH_THEME_GIT_PROMPT_CLEAN" ]] && (( ! detached )); then
-      read ahead behind <<< "$(
+      if divergence=$(
         __git_prompt_git rev-list --left-right --count 'HEAD...@{u}' 2>/dev/null
-      )"
-      (( behind > 0 )) && relation=↓
-      if (( behind == 0 )) &&
-          upstream_ref=$(__git_prompt_git rev-parse --symbolic-full-name '@{u}' 2>/dev/null); then
-        # A force-push followed by an explicit fetch can leave this ref stale
-        # until the next prefetch and cause a false positive. Refresh it with
-        # `git maintenance run --task=prefetch`.
-        behind=$(__git_prompt_git rev-list --count --max-count=1 \
-          "HEAD..refs/prefetch/${upstream_ref#refs/}" 2>/dev/null) || behind=0
-        (( behind > 0 )) && relation=⇣
+      ); then
+        read ahead behind <<< "$divergence"
+        (( behind > 0 )) && relation=↓
+        if (( behind == 0 )) &&
+            upstream_ref=$(__git_prompt_git rev-parse --symbolic-full-name '@{u}' 2>/dev/null); then
+          # A force-push followed by an explicit fetch can leave this ref stale
+          # until the next prefetch and cause a false positive. Refresh it with
+          # `git maintenance run --task=prefetch`.
+          behind=$(__git_prompt_git rev-list --count --max-count=1 \
+            "HEAD..refs/prefetch/${upstream_ref#refs/}" 2>/dev/null) || behind=0
+          (( behind > 0 )) && relation=⇣
+        fi
+        (( ahead > 0 )) && relation+="↑${ahead:#1}"
+      else
+        if (( has_remote )); then
+          base=--remotes
+        else
+          base=main
+        fi
+        if __git_prompt_git rev-list --max-count=1 HEAD --not "$base" 2>/dev/null |
+              read -r; then
+          relation=+
+        fi
       fi
-      (( ahead > 0 )) && relation+="↑${ahead:#1}"
       [[ -n "$relation" ]] && mark="%F{152}${relation}%F{109}"
     fi
   fi
