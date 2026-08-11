@@ -28,7 +28,8 @@ clipcopy() {
 }
 
 __git_prompt_git() {
-  GIT_OPTIONAL_LOCKS=0 command git "$@"
+  GIT_OPTIONAL_LOCKS=0 GIT_NO_LAZY_FETCH=1 GIT_TERMINAL_PROMPT=0 \
+    command git --no-pager "$@"
 }
 
 parse_git_dirty() {
