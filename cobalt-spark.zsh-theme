@@ -53,7 +53,7 @@ __cobalt_spark_pwd_prompt_info() {
 _omz_git_prompt_info() {
   local IFS=$' \t\n'
   local git_dir ref upstream upstream_ref mark relation ahead behind detached
-  local config line hide_info has_remote divergence base
+  local config line hide_info has_remote divergence
 
   git_dir=$(__git_prompt_git rev-parse --git-dir 2>/dev/null) || return 0
   config=$(__git_prompt_git config --get-regexp \
@@ -109,16 +109,10 @@ _omz_git_prompt_info() {
           (( behind > 0 )) && relation=⇣
         fi
         (( ahead > 0 )) && relation+="↑${ahead:#1}"
-      else
-        if (( has_remote )); then
-          base=--remotes
-        else
-          base=main
-        fi
-        if __git_prompt_git rev-list --max-count=1 HEAD --not "$base" 2>/dev/null |
-              read -r; then
-          relation=+
-        fi
+      elif (( has_remote )) &&
+          __git_prompt_git rev-list --max-count=1 HEAD --not --remotes 2>/dev/null |
+            read -r; then
+        relation=⇡
       fi
       [[ -n "$relation" ]] && mark="%F{152}${relation}%F{109}"
     fi
