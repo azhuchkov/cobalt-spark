@@ -56,6 +56,7 @@ _omz_git_prompt_info() {
   local config line hide_info has_remote divergence
 
   git_dir=$(__git_prompt_git rev-parse --git-dir 2>/dev/null) || return 0
+  # Read hide-info and remote presence together because this runs every prompt.
   config=$(__git_prompt_git config --get-regexp \
     '^(oh-my-zsh\.hide-info|remote\..*\.)' 2>/dev/null) || config=
   for line in "${(@f)config}"; do
@@ -66,23 +67,29 @@ _omz_git_prompt_info() {
   done
   [[ "$hide_info" == 1 ]] && return 0
 
+  # Prefer a branch name, then fall back to a tag or abbreviated commit for a
+  # detached HEAD.
   if ! ref=$(__git_prompt_git symbolic-ref --short HEAD 2>/dev/null); then
     detached=1
     ref=$(__git_prompt_git describe --tags --exact-match HEAD 2>/dev/null) ||
       ref=$(__git_prompt_git rev-parse --short HEAD 2>/dev/null) || return 0
   fi
 
+  # Prevent Git-provided names from being interpreted as prompt escapes.
   ref=${ref//\%/%%}
   (( detached )) && ref="%F{152}@%F{109}${ref}"
 
+  # Preserve Oh My Zsh's opt-in display of the configured upstream name.
   if (( ! detached && ${+ZSH_THEME_GIT_SHOW_UPSTREAM} )); then
     upstream=$(__git_prompt_git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null) &&
       upstream=" -> ${upstream//\%/%%}"
   fi
 
+  # Show only the highest-priority state: operation, dirty tree, or relation.
   if [[ -d "$git_dir/rebase-merge" || -d "$git_dir/rebase-apply" ||
         -f "$git_dir/MERGE_HEAD" || -f "$git_dir/CHERRY_PICK_HEAD" ||
         -f "$git_dir/REVERT_HEAD" || -f "$git_dir/BISECT_LOG" ]]; then
+    # Use color to distinguish an operation from one with unresolved conflicts.
     if __git_prompt_git diff --quiet --diff-filter=U; then
       mark="%F{11}!%F{109}"
     else
@@ -94,6 +101,7 @@ _omz_git_prompt_info() {
         ! __git_prompt_git diff --quiet --diff-filter=U; then
       mark="%F{9}*%F{109}"
     elif [[ "$mark" == "$ZSH_THEME_GIT_PROMPT_CLEAN" ]] && (( ! detached )); then
+      # With HEAD on the left, rev-list reports ahead before behind.
       if divergence=$(
         __git_prompt_git rev-list --left-right --count 'HEAD...@{u}' 2>/dev/null
       ); then
@@ -109,6 +117,8 @@ _omz_git_prompt_info() {
           (( behind > 0 )) && relation=⇣
         fi
         (( ahead > 0 )) && relation+="↑${ahead:#1}"
+      # Without an upstream, compare only when a remote publication target
+      # exists.
       elif (( has_remote )) &&
           __git_prompt_git rev-list --max-count=1 HEAD --not --remotes 2>/dev/null |
             read -r; then
