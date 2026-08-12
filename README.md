@@ -10,22 +10,19 @@ scanning the terminal.
 For comparison, see the
 [same terminal session rendered with the `robbyrussell` theme](https://github.com/user-attachments/assets/699dfd18-4705-4dcb-b219-f3afa44efc1e).
 
-> **Live Git segment:** Cobalt Spark can refresh its Git context while the
-> prompt is idle. See [Live Git updates](#live-git-updates) for details.
-
 ## Overview
 
+- Git segment with ⚡[Live Git](#live-git-updates)⁠ updates, showing the current branch,
+working-tree dirtiness, Git operations in progress, upstream divergence, unpublished commits,
+and an [early notice⁠](#git-prefetch) about remote changes.
 - Compact working-directory display with the current directory and an
 abbreviated parent.
-- Git context including the current branch or detached `HEAD`, working-tree
-changes, operations in progress, upstream divergence, and unpublished
-commits.
+- A [hotkey](#quickly-copy-the-current-directory) to quickly copy the current working directory.
 - Command and pipeline status indication.
-- Python virtual environments, nested shell levels, and background jobs when
-present.
+- Python [virtual environments](#python-virtual-environments), nested shell levels, and
+background jobs when present.
 - Informative continuation prompts for incomplete multiline commands.
-- An optional hotkey for copying the current working directory.
-- Works with Oh My Zsh, Zsh plugin managers, and direct sourcing.
+- Supports Oh My Zsh, Zsh plugin managers, and direct installation.
 
 ## Installation
 
@@ -97,6 +94,19 @@ Cobalt Spark works without additional configuration. The settings below are
 shell variables; put persistent values in `~/.zshrc`. The live watcher reads
 its settings when it starts.
 
+### Live Git updates
+
+When [fswatch](https://github.com/emcrisostomo/fswatch) is installed, Cobalt
+Spark watches the current repository and updates the Git segment while the
+prompt is idle. Without fswatch, the Git segment still works but updates only
+when the prompt is rendered again.
+
+The watcher latency defaults to 500 milliseconds. To change it, set a value in
+seconds like this: `COBALT_SPARK_THEME_LIVE_GIT_LATENCY=1.5`.
+
+To turn off live Git updates entirely, set `COBALT_SPARK_THEME_LIVE_GIT_OFF` 
+to a non-empty value.
+
 ### Python virtual environments
 
 In standalone setups, Cobalt Spark detects the active Python environment
@@ -108,20 +118,6 @@ existing plugin list in `~/.zshrc`, for example:
 ```zsh
 plugins=(git virtualenv)
 ```
-
-### Live Git updates
-
-When [fswatch](https://github.com/emcrisostomo/fswatch) is available, Cobalt
-Spark watches the current repository and updates the Git segment while the
-prompt is idle. Without fswatch, the Git segment still works but updates only
-when the prompt is rendered again.
-
-Set `COBALT_SPARK_THEME_LIVE_GIT_OFF` to a non-empty value to turn off live Git
-updates.
-
-The watcher latency defaults to 500 milliseconds. Set
-`COBALT_SPARK_THEME_LIVE_GIT_LATENCY` to configure it in seconds, for example
-`COBALT_SPARK_THEME_LIVE_GIT_LATENCY=1`.
 
 ### Quickly copy the current directory
 
@@ -232,7 +228,7 @@ to provide an early warning that your branch is behind its upstream.
   move the binding of the hotkey toward the end of `~/.zshrc`, after all plugins are
   loaded; the warning itself is harmless.
 - If upstream changes take longer than expected to appear in the prompt, note that
-  Git maintenance normally prefetches them *hourly*. Git versions before `2.45.3` may
+  Git maintenance normally prefetches them *hourly*. Also Git versions before `2.45.3` may
   stop processing repositories after the first maintenance failure, so upgrading
   Git is recommended.
 
