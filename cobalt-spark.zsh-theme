@@ -227,6 +227,11 @@ cobalt-spark-copy-cwd() {
 zle -N cobalt-spark-copy-cwd
 
 __cobalt_spark_live_git_shutdown() {
+  # Detached watchers are not waitable, so cleanup must ignore stale-job errors.
+  setopt localoptions noerrexit
+
+  (( ZSH_SUBSHELL )) && return
+
   # Remove the ZLE handler before closing the descriptor.
   if (( __cobalt_spark_live_git_fd >= 0 )); then
     zle -F "$__cobalt_spark_live_git_fd" 2>/dev/null
@@ -266,7 +271,7 @@ __cobalt_spark_live_git_quote_ere() {
 
 __cobalt_spark_live_git_on_watch_event() {
   local fd=$1
-  local error=$2
+  local error=${2-}
   local event
 
   # EOF / watcher failure.
@@ -309,6 +314,8 @@ __cobalt_spark_live_git_bootstrap() {
       -e "^${REPLY}/objects/.*"
       -e "^${REPLY}/logs$"
       -e "^${REPLY}/logs/.*"
+      -e "^${REPLY}/fsmonitor--daemon$"
+      -e "^${REPLY}/fsmonitor--daemon/.*"
       -e "^${REPLY}/.*\\.lock$"
       -e "^${REPLY}/COMMIT_EDITMSG$"
     )
@@ -329,6 +336,8 @@ __cobalt_spark_live_git_bootstrap() {
   # Attribute-only events include the index atime changes caused by the prompt
   # itself under kqueue and would create a live-update loop. A chmod-only Git
   # change therefore waits for the next normal prompt render.
+  # Background startup cannot confirm that fswatch initialized successfully;
+  # an immediate failure closes the FIFO writer and is handled as EOF by ZLE.
   command fswatch -E -r -o \
     -l "${COBALT_SPARK_THEME_LIVE_GIT_LATENCY:-0.5}" \
     --event Created --event Updated --event Removed --event Renamed \
@@ -357,6 +366,8 @@ __cobalt_spark_live_git_bootstrap() {
 }
 
 __cobalt_spark_live_git_on_chpwd() {
+  (( ZSH_SUBSHELL )) && return
+
   local -a git_info
 
   git_info=("${(@f)$(
@@ -365,12 +376,12 @@ __cobalt_spark_live_git_on_chpwd() {
       --git-dir \
       --git-common-dir \
       2>/dev/null
-  )}")
+  )}") || git_info=()
 
   # Not inside a worktree.
   if (( ${#git_info} != 3 )); then
     (( __cobalt_spark_live_git_pid )) && __cobalt_spark_live_git_shutdown
-    return
+    return 0
   fi
 
   local root=${git_info[1]:A}
@@ -391,7 +402,8 @@ __cobalt_spark_live_git_on_chpwd() {
   [[ $common_dir != $root/* && $common_dir != $git_dir ]] &&
     paths+=("$common_dir")
 
-  __cobalt_spark_live_git_bootstrap "$root" "$git_dir" "$common_dir" "${paths[@]}"
+  __cobalt_spark_live_git_bootstrap \
+    "$root" "$git_dir" "$common_dir" "${paths[@]}" || return 0
 }
 
 __cobalt_spark_live_git_ensure_watcher() {
