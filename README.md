@@ -104,8 +104,9 @@ when the prompt is rendered again.
 The watcher latency defaults to 500 milliseconds. To change it, set a value in
 seconds like this: `COBALT_SPARK_THEME_LIVE_GIT_LATENCY=1.5`.
 
-To turn off live Git updates entirely, set `COBALT_SPARK_THEME_LIVE_GIT_OFF` 
-to a non-empty value.
+To turn off live Git updates entirely, set `COBALT_SPARK_THEME_LIVE_GIT_OFF`
+to a non-empty value. It affects watchers started after it is set, but does
+not stop a running watcher.
 
 ### Python virtual environments
 

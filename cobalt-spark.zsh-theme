@@ -226,44 +226,46 @@ cobalt-spark-copy-cwd() {
 
 zle -N cobalt-spark-copy-cwd
 
+# Dynamic FD syntax in the live watcher must be parsed with this option off.
+# Restore the caller's setting after the watcher is initialized.
+typeset -g __cobalt_spark_restore_ignorebraces=${options[ignorebraces]}
+unsetopt ignorebraces
+
 __cobalt_spark_live_git_shutdown() {
-  # Detached watchers are not waitable, so cleanup must ignore stale-job errors.
-  setopt localoptions noerrexit
+  emulate -L zsh
 
   (( ZSH_SUBSHELL )) && return
 
-  # Remove the ZLE handler before closing the descriptor.
-  if (( __cobalt_spark_live_git_fd >= 0 )); then
-    zle -F "$__cobalt_spark_live_git_fd" 2>/dev/null
-    exec {__cobalt_spark_live_git_fd}<&-
-    __cobalt_spark_live_git_fd=-1
+  if (( __cobalt_spark_live_git_events_fd >= 0 )); then
+    # Remove the ZLE handler before closing the descriptor.
+    zle -F "$__cobalt_spark_live_git_events_fd" 2>/dev/null
+    exec {__cobalt_spark_live_git_events_fd}<&-
+    __cobalt_spark_live_git_events_fd=-1
   fi
 
-  if (( __cobalt_spark_live_git_pid > 0 )); then
-    kill "$__cobalt_spark_live_git_pid" 2>/dev/null
-    wait "$__cobalt_spark_live_git_pid" 2>/dev/null
-    __cobalt_spark_live_git_pid=0
-  fi
-
-  if [[ -n $__cobalt_spark_live_git_fifo ]]; then
-    command rm -f -- "$__cobalt_spark_live_git_fifo"
-    command rmdir -- "${__cobalt_spark_live_git_fifo:h}" 2>/dev/null
-    __cobalt_spark_live_git_fifo=
+  if (( ${+__cobalt_spark_live_git_supervisor_fd} )) &&
+      (( __cobalt_spark_live_git_supervisor_fd >= 0 )); then
+    # A fork-only background job can retain this descriptor, so wake the
+    # supervisor explicitly instead of waiting for EOF.
+    print -r -u "$__cobalt_spark_live_git_supervisor_fd" -- shutdown
+    exec {__cobalt_spark_live_git_supervisor_fd}>&-
+    __cobalt_spark_live_git_supervisor_fd=-1
   fi
 
   __cobalt_spark_live_git_root=
 }
 
-(( ${+__cobalt_spark_live_git_pid} )) && __cobalt_spark_live_git_shutdown
+(( ${+__cobalt_spark_live_git_events_fd} )) &&
+  __cobalt_spark_live_git_shutdown
 
-typeset -gi __cobalt_spark_live_git_fd=-1
-typeset -gi __cobalt_spark_live_git_pid=0
+typeset -gi __cobalt_spark_live_git_events_fd=-1
+typeset -gi __cobalt_spark_live_git_supervisor_fd=-1
 typeset -g  __cobalt_spark_live_git_root=
-typeset -g  __cobalt_spark_live_git_fifo=
 
 __cobalt_spark_live_git_quote_ere() {
-  setopt localoptions extendedglob
-  unsetopt shglob
+  emulate -L zsh
+  setopt localoptions extended_glob
+
   local MATCH MBEGIN MEND
   local pattern='(#m)[\[.^$*+?(){}|\\]'
   REPLY=${1//$~pattern/\\$MATCH}
@@ -295,7 +297,10 @@ __cobalt_spark_live_git_on_watch_event() {
 }
 
 __cobalt_spark_live_git_bootstrap() {
+  emulate -L zsh
   setopt localoptions nobgnice
+
+  [[ -n ${COBALT_SPARK_THEME_LIVE_GIT_OFF:-} ]] && return 0
 
   local root=$1
   local git_dir=$2
@@ -310,12 +315,10 @@ __cobalt_spark_live_git_bootstrap() {
   for dir in "$git_dir" ${${common_dir:#$git_dir}:+"$common_dir"}; do
     __cobalt_spark_live_git_quote_ere "$dir"
     filters+=(
-      -e "^${REPLY}/objects$"
-      -e "^${REPLY}/objects/.*"
-      -e "^${REPLY}/logs$"
-      -e "^${REPLY}/logs/.*"
-      -e "^${REPLY}/fsmonitor--daemon$"
-      -e "^${REPLY}/fsmonitor--daemon/.*"
+      -e "^${REPLY}/objects(/.*)?$"
+      -e "^${REPLY}/logs(/.*)?$"
+      -e "^${REPLY}/fsmonitor--daemon(/.*)?$"
+      -e "^${REPLY}/fsmonitor--daemon\\.ipc$"
       -e "^${REPLY}/.*\\.lock$"
       -e "^${REPLY}/COMMIT_EDITMSG$"
     )
@@ -323,41 +326,75 @@ __cobalt_spark_live_git_bootstrap() {
 
   local tmpdir=${TMPDIR:-/tmp}
   local fifo_dir
-  # Keep stale FIFOs from interrupted shells from causing name collisions.
   fifo_dir=$(command mktemp -d \
-    "${tmpdir%/}/cobalt-spark-fswatch-${$}.XXXXXX") || return 1
-  local fifo="$fifo_dir/events"
+    "${tmpdir%/}/cobalt-spark-fswatch.XXXXXX") || return 1
 
-  command mkfifo "$fifo" || {
+  local events_fifo="$fifo_dir/events_fifo"
+  local supervisor_fifo="$fifo_dir/supervisor_fifo"
+
+  command mkfifo "$events_fifo" "$supervisor_fifo" || {
+    command rm -f -- "$events_fifo" "$supervisor_fifo"
     command rmdir -- "$fifo_dir" 2>/dev/null
     return 1
   }
 
-  # Attribute-only events include the index atime changes caused by the prompt
-  # itself under kqueue and would create a live-update loop. A chmod-only Git
-  # change therefore waits for the next normal prompt render.
-  # Background startup cannot confirm that fswatch initialized successfully;
-  # an immediate failure closes the FIFO writer and is handled as EOF by ZLE.
-  command fswatch -E -r -o \
-    -l "${COBALT_SPARK_THEME_LIVE_GIT_LATENCY:-0.5}" \
-    --event Created --event Updated --event Removed --event Renamed \
-    --event MovedFrom --event MovedTo \
-    "${filters[@]}" -- "${paths[@]}" >"$fifo" &!
-  local pid=$!
+  __cobalt_spark_live_git_quote_ere "${fifo_dir:A}"
+  filters+=(-e "^${REPLY}(/.*)?$")
+
+  # O_RDWR prevents either side of the lifetime FIFO from blocking at startup.
+  local supervisor_fd
+  sysopen -r -w -o cloexec -u supervisor_fd "$supervisor_fifo" || {
+    command rm -f -- "$events_fifo" "$supervisor_fifo"
+    command rmdir -- "$fifo_dir" 2>/dev/null
+    return 1
+  }
+
+  # The inner shell owns fswatch. Its parent closes the inherited write end
+  # before waiting for the owner shell's shutdown signal or EOF on exec.
+  (
+    (
+      emulate -L zsh
+      setopt localoptions nobgnice
+
+      exec {supervisor_fd}>&-
+
+      local supervisor_read_fd watcher_pid
+      sysopen -r -u supervisor_read_fd "$supervisor_fifo" || exit 1
+
+      # Background startup cannot confirm that fswatch initialized successfully;
+      # an immediate failure closes the FIFO writer and is handled as EOF by ZLE.
+      command fswatch -E -r -o \
+        -l "${COBALT_SPARK_THEME_LIVE_GIT_LATENCY:-0.5}" \
+        --event Created --event Updated --event Removed --event Renamed \
+        --event MovedFrom --event MovedTo \
+        "${filters[@]}" -- "${paths[@]}" >"$events_fifo" \
+        2> >(while IFS= read -r line; do
+          print -u2 -r -- "cobalt-spark fswatch: $line"
+        done) &
+
+      watcher_pid=$!
+
+      IFS= read -r -u "$supervisor_read_fd"
+
+      kill "$watcher_pid" 2>/dev/null
+      wait "$watcher_pid" 2>/dev/null
+
+      exec {supervisor_read_fd}<&-
+
+      command rm -f -- "$events_fifo" "$supervisor_fifo"
+      command rmdir -- "$fifo_dir" 2>/dev/null
+    ) &!
+  )
 
   local fd
-  sysopen -r -o cloexec -u fd "$fifo" || {
-    kill "$pid" 2>/dev/null
-    wait "$pid" 2>/dev/null
-    command rm -f -- "$fifo"
-    command rmdir -- "$fifo_dir" 2>/dev/null
+  sysopen -r -o cloexec -u fd "$events_fifo" || {
+    exec {supervisor_fd}>&-
     return 1
   }
 
   __cobalt_spark_live_git_root=$root
-  __cobalt_spark_live_git_fifo=$fifo
-  __cobalt_spark_live_git_pid=$pid
-  __cobalt_spark_live_git_fd=$fd
+  __cobalt_spark_live_git_events_fd=$fd
+  __cobalt_spark_live_git_supervisor_fd=$supervisor_fd
 
   if ! zle -F "$fd" __cobalt_spark_live_git_on_watch_event; then
     __cobalt_spark_live_git_shutdown
@@ -366,6 +403,8 @@ __cobalt_spark_live_git_bootstrap() {
 }
 
 __cobalt_spark_live_git_on_chpwd() {
+  emulate -L zsh
+
   (( ZSH_SUBSHELL )) && return
 
   local -a git_info
@@ -380,7 +419,8 @@ __cobalt_spark_live_git_on_chpwd() {
 
   # Not inside a worktree.
   if (( ${#git_info} != 3 )); then
-    (( __cobalt_spark_live_git_pid )) && __cobalt_spark_live_git_shutdown
+    (( __cobalt_spark_live_git_supervisor_fd >= 0 )) &&
+      __cobalt_spark_live_git_shutdown
     return 0
   fi
 
@@ -391,7 +431,8 @@ __cobalt_spark_live_git_on_chpwd() {
   # Moving around inside the same repository requires no action.
   [[ $root == $__cobalt_spark_live_git_root ]] && return
 
-  (( __cobalt_spark_live_git_pid )) && __cobalt_spark_live_git_shutdown
+  (( __cobalt_spark_live_git_supervisor_fd >= 0 )) &&
+    __cobalt_spark_live_git_shutdown
 
   local -a paths=("$root")
 
@@ -406,11 +447,8 @@ __cobalt_spark_live_git_on_chpwd() {
     "$root" "$git_dir" "$common_dir" "${paths[@]}" || return 0
 }
 
-__cobalt_spark_live_git_ensure_watcher() {
-  if (( __cobalt_spark_live_git_pid )); then
-    kill -0 "$__cobalt_spark_live_git_pid" 2>/dev/null && return 0
-    __cobalt_spark_live_git_shutdown
-  fi
+__cobalt_spark_live_git_check_init() {
+  (( __cobalt_spark_live_git_supervisor_fd >= 0 )) && return 0
 
   local dir=${PWD:A}
 
@@ -425,16 +463,19 @@ __cobalt_spark_live_git_ensure_watcher() {
   done
 }
 
-add-zsh-hook -d precmd __cobalt_spark_live_git_ensure_watcher
+add-zsh-hook -d precmd __cobalt_spark_live_git_check_init
 add-zsh-hook -d chpwd __cobalt_spark_live_git_on_chpwd
 add-zsh-hook -d zshexit __cobalt_spark_live_git_shutdown
 
 if [[ -z ${COBALT_SPARK_THEME_LIVE_GIT_OFF:-} ]] &&
     (( ${+commands[fswatch]} )) && zmodload zsh/system; then
-  add-zsh-hook precmd __cobalt_spark_live_git_ensure_watcher
+  add-zsh-hook precmd __cobalt_spark_live_git_check_init
   add-zsh-hook chpwd __cobalt_spark_live_git_on_chpwd
   add-zsh-hook zshexit __cobalt_spark_live_git_shutdown
 
   # Check the initial directory.
   __cobalt_spark_live_git_on_chpwd
 fi
+
+[[ $__cobalt_spark_restore_ignorebraces == on ]] && setopt ignorebraces
+unset __cobalt_spark_restore_ignorebraces
