@@ -143,20 +143,20 @@ typeset -g __cobalt_spark_virtualenv_prompt_info= __cobalt_spark_pipeline_color=
 (( ${+__cobalt_spark_sigpipe_status} )) ||
   typeset -gri __cobalt_spark_sigpipe_status=$(( 128 + $(kill -l PIPE) ))
 
-__cobalt_spark_status_precmd_hook() {
+__cobalt_spark_cmd_status_hook() {
   # Require a successful final stage and ignore SIGPIPE.
   __cobalt_spark_pipeline_color=${${pipestatus[-1]:#<1->}:+${${${(@)pipestatus:#0}:#$__cobalt_spark_sigpipe_status}:+%F{178}}}
   [[ -n $__cobalt_spark_pipeline_color ]] || __cobalt_spark_pipeline_color='%F{244}'
 }
 
-__cobalt_spark_precmd_hook() {
+__cobalt_spark_virtualenv_hook() {
   __cobalt_spark_virtualenv_prompt_info=$(virtualenv_prompt_info)
   return 0
 }
 
-add-zsh-hook precmd __cobalt_spark_precmd_hook
+add-zsh-hook precmd __cobalt_spark_virtualenv_hook
 # Run first because another hook would overwrite pipestatus.
-precmd_functions=(__cobalt_spark_status_precmd_hook ${precmd_functions:#__cobalt_spark_status_precmd_hook})
+precmd_functions=(__cobalt_spark_cmd_status_hook ${precmd_functions:#__cobalt_spark_cmd_status_hook})
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %F{blue}(%F{109}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%F{blue})%f"
