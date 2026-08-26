@@ -52,7 +52,7 @@ __cobalt_spark_pwd_prompt_info() {
 # OMZ runs this producer in both synchronous and async git_prompt_info modes.
 _omz_git_prompt_info() {
   local IFS=$' \t\n'
-  local git_dir ref upstream upstream_ref mark relation ahead behind detached
+  local git_dir ref branch upstream upstream_ref mark relation ahead behind detached
   local config line hide_info has_remote divergence
 
   git_dir=$(__git_prompt_git rev-parse --git-dir 2>/dev/null) || return 0
@@ -69,7 +69,11 @@ _omz_git_prompt_info() {
 
   # Prefer a branch name, then fall back to a tag or abbreviated commit for a
   # detached HEAD.
-  if ! ref=$(__git_prompt_git symbolic-ref --short HEAD 2>/dev/null); then
+  # --short may return heads/<name> when another ref makes the name ambiguous.
+  if branch=$(__git_prompt_git symbolic-ref HEAD 2>/dev/null); then
+    branch=${branch#refs/heads/}
+    ref=$branch
+  else
     detached=1
     ref=$(__git_prompt_git describe --tags --exact-match HEAD 2>/dev/null) ||
       ref=$(__git_prompt_git rev-parse --short HEAD 2>/dev/null) || return 0
@@ -120,7 +124,9 @@ _omz_git_prompt_info() {
       # Without an upstream, compare only when a remote publication target
       # exists.
       elif (( has_remote )) &&
-          __git_prompt_git rev-list --max-count=1 HEAD --not --remotes 2>/dev/null |
+          __git_prompt_git rev-list --max-count=1 HEAD --not \
+            --exclude="$branch" --branches --remotes --tags \
+            2>/dev/null |
             read -r; then
         relation=⇡
       fi
