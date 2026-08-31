@@ -14,9 +14,9 @@ using `robbyrussell`](https://github.com/user-attachments/assets/699dfd18-4705-4
 ## Overview
 
 - Git segment with ⚡[Live Git](#live-git-updates)⁠ updates, showing the current branch with
-configurable prefix shortening, working-tree dirtiness, Git operations in progress, upstream
-divergence, commits unique to the current branch, and an [early notice⁠](#git-prefetch) about
-remote changes.
+[configurable prefix shortening](#theme-options), working-tree dirtiness, Git operations in
+progress, upstream divergence, commits unique to the current branch, and an
+[early notice⁠](#git-prefetch) about remote changes.
 - Compact working-directory display with the current directory and an
 abbreviated parent.
 - A [hotkey](#quickly-copy-the-current-directory) to quickly copy the current working directory.
