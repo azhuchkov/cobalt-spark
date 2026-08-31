@@ -192,6 +192,16 @@ TIMEFMT="${(%):-%F{8\}}◷ ${(%):-%F{14\}}%*Es ${(%):-%F{8\}}· ${(%):-%F{11\}}%
 <img width="618" height="94" alt="REPORTTIME demo screenshot"
   src="https://github.com/user-attachments/assets/4a355afd-8259-49b0-bf68-bbc9c895225b" />
 
+### Command timestamps
+
+If you want to know *when* commands were run rather than how long they took,
+some terminal emulators can provide this information without adding it to the
+prompt. For example, **iTerm2** can show timestamps for terminal lines with
+**View → Show Timestamps**.
+
+Many terminal emulators also support **shell integration** that tracks command
+boundaries and can expose related metadata. Available features vary by terminal.
+
 ### Git prefetch
 
 To let the prompt detect upstream changes before an explicit fetch, enable
