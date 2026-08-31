@@ -146,7 +146,9 @@ For best compatibility with other plugins, place this binding near the end of
   parent directory name are retained when it is abbreviated. Set it to `0`
   to hide the parent directory entirely.
 - Set `COBALT_SPARK_THEME_PROMPT_SIGN` to use a different prompt anchor, for
-  example `COBALT_SPARK_THEME_PROMPT_SIGN=' % '`.
+  example `COBALT_SPARK_THEME_PROMPT_SIGN=' % '`. You can also make the prompt
+  **multiline** by embedding a line break:
+  `COBALT_SPARK_THEME_PROMPT_SIGN=$'\n⚡'`.
 
 ## Terminal setup
 
