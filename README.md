@@ -158,10 +158,10 @@ or [One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal)—the latt
 
 Use a font that includes the lightning bolt (`⚡`). Most [Nerd Fonts](https://www.nerdfonts.com/) work;
 [JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip)
-is recommended (files with the `NL` suffix contain no 
-[ligatures](https://en.wikipedia.org/wiki/Ligature_(writing)); the `Mono` variant
-(with an additional `Mono` in the file name) renders some icons at a smaller size,
-but is generally considered safer for terminals).
+is recommended. In this font, files with the `NL` suffix contain no 
+[ligatures](https://en.wikipedia.org/wiki/Ligature_(writing)), while the `Mono` variant,
+identified by an additional `Mono` in the file name, renders some icons at a smaller size
+but is generally considered safer for terminals. The screenshots use the regular (non-`Mono`) variant.
 
 ## Tips & Tricks
 
