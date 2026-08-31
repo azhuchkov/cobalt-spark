@@ -309,6 +309,9 @@ __cobalt_spark_live_git_on_watch_event() {
   if (( ${+parameters[_omz_async_functions]} )) &&
       (( ${_omz_async_functions[(Ie)_omz_git_prompt_info]} )) &&
       (( ${+functions[_omz_async_request]} )); then
+    # OMZ has no per-handler request API, so dynamically scope its handler list
+    # to keep repository events from restarting unrelated async prompt work.
+    local -a _omz_async_functions=(_omz_git_prompt_info)
     _omz_async_request
   else
     zle .reset-prompt
