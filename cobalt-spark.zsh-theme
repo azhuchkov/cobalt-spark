@@ -52,7 +52,8 @@ __cobalt_spark_pwd_prompt_info() {
 # OMZ runs this producer in both synchronous and async git_prompt_info modes.
 _omz_git_prompt_info() {
   local IFS=$' \t\n'
-  local git_dir ref branch upstream upstream_ref mark relation ahead behind detached
+  local git_dir ref branch branch_prefix upstream upstream_ref
+  local mark relation ahead behind detached
   local config line hide_info has_remote divergence
 
   git_dir=$(__git_prompt_git rev-parse --git-dir 2>/dev/null) || return 0
@@ -73,6 +74,12 @@ _omz_git_prompt_info() {
   if branch=$(__git_prompt_git symbolic-ref HEAD 2>/dev/null); then
     branch=${branch#refs/heads/}
     ref=$branch
+    for branch_prefix in "${COBALT_SPARK_THEME_GIT_HIDDEN_PREFIXES[@]}"; do
+      if [[ "$ref" == "$branch_prefix"/* ]]; then
+        ref="…/${ref#"$branch_prefix"/}"
+        break
+      fi
+    done
   else
     detached=1
     ref=$(__git_prompt_git describe --tags --exact-match HEAD 2>/dev/null) ||
@@ -144,6 +151,11 @@ _omz_git_prompt_info() {
 
 zmodload zsh/parameter
 autoload -Uz add-zsh-hook
+
+(( ${+COBALT_SPARK_THEME_GIT_HIDDEN_PREFIXES} )) ||
+  typeset -ga COBALT_SPARK_THEME_GIT_HIDDEN_PREFIXES=(
+    feature feat bugfix chore docs refactor fix
+  )
 
 typeset -g __cobalt_spark_virtualenv_prompt_info= __cobalt_spark_pipeline_color=
 (( ${+__cobalt_spark_sigpipe_status} )) ||

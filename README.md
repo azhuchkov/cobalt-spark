@@ -13,9 +13,10 @@ using `robbyrussell`](https://github.com/user-attachments/assets/699dfd18-4705-4
 
 ## Overview
 
-- Git segment with ⚡[Live Git](#live-git-updates)⁠ updates, showing the current branch,
-working-tree dirtiness, Git operations in progress, upstream divergence, commits unique to the
-current branch, and an [early notice⁠](#git-prefetch) about remote changes.
+- Git segment with ⚡[Live Git](#live-git-updates)⁠ updates, showing the current branch with
+configurable prefix shortening, working-tree dirtiness, Git operations in progress, upstream
+divergence, commits unique to the current branch, and an [early notice⁠](#git-prefetch) about
+remote changes.
 - Compact working-directory display with the current directory and an
 abbreviated parent.
 - A [hotkey](#quickly-copy-the-current-directory) to quickly copy the current working directory.
@@ -137,6 +138,10 @@ For best compatibility with other plugins, place this binding near the end of
 
 ### Theme options
 
+- `COBALT_SPARK_THEME_GIT_HIDDEN_PREFIXES` lists branch prefixes collapsed to
+  `…` in the Git segment when followed by `/`. The defaults are `feature`,
+  `feat`, `bugfix`, `chore`, `docs`, `refactor`, and `fix`. Assign an empty
+  array to show full branch names.
 - `COBALT_SPARK_THEME_PARENT_CAP` controls how many leading characters of the
   parent directory name are retained when it is abbreviated. Set it to `0`
   to hide the parent directory entirely.
