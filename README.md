@@ -158,7 +158,7 @@ or [One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal)—the latt
 
 Use a font that includes the lightning bolt (`⚡`). Most [Nerd Fonts](https://www.nerdfonts.com/) work;
 [JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip)
-is recommended. In this font, files with the `NL` suffix contain no 
+is recommended. In this font, files with the `NL` suffix contain no
 [ligatures](https://en.wikipedia.org/wiki/Ligature_(writing)), while the `Mono` variant,
 identified by an additional `Mono` in the file name, renders some icons at a smaller size
 but is generally considered safer for terminals. The screenshots use the regular (non-`Mono`) variant.
@@ -217,7 +217,7 @@ background. Prefetched changes are stored separately, so remote-tracking
 branches are not updated until you run `git fetch`. The prompt uses this data
 to provide an early warning that your branch is behind its upstream.
 
-<img width="594" height="71" alt="git prefetch demo screenshot" 
+<img width="594" height="71" alt="git prefetch demo screenshot"
   src="https://github.com/user-attachments/assets/f1bf7317-ae75-45f4-9222-46521b7b75fb" />
 
 ## Troubleshooting
