@@ -5,7 +5,7 @@ colors keep essential context visible without competing with command output,
 while a prominent lightning anchor makes command lines easy to find when
 scanning the terminal.
 
-<img width="1000" alt="Cobalt Spark live Git preview" src="https://github.com/user-attachments/assets/2cdc71b3-7258-4f6a-8d93-a54aef610def" />
+<img width="1000" alt="Cobalt Spark live Git preview" src="https://github.com/user-attachments/assets/820e5ac6-6fb8-4c1d-9c01-95a28d010524" />
 
 A [fuller static preview](https://github.com/user-attachments/assets/05f2a056-0cfd-4874-9496-4ea1d35e4e41)
 is also available and can be compared with the [same terminal session rendered
