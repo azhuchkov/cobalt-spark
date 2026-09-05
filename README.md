@@ -28,7 +28,12 @@ background jobs when present.
 
 ## Installation
 
-Choose the installation method that matches your Zsh setup.
+> [!NOTE]
+> Live Git updates require [fswatch](https://github.com/emcrisostomo/fswatch).
+> Install it with your package manager if you want the Git segment to update
+> automatically while the prompt is idle.
+
+Choose the setup that matches your Zsh environment:
 
 ### Oh My Zsh
 
