@@ -13,16 +13,19 @@ using `robbyrussell`](https://github.com/user-attachments/assets/699dfd18-4705-4
 
 ## Overview
 
-- Git segment with ⚡[Live Git](#live-git-updates)⁠ updates, showing the current branch with
-[configurable prefix shortening](#theme-options), working-tree dirtiness, Git operations in
-progress, upstream divergence, commits unique to the current branch, and an
-[early notice⁠](#git-prefetch) about remote changes.
+- ⚡[Live Git](#live-git-updates) updates: the Git segment refreshes automatically
+  when an IDE, coding agent, or another terminal changes the repository—without
+  pressing Enter.
+- Compact Git segment with [configurable branch prefix shortening](#theme-options),
+  working-tree dirtiness, operations in progress, upstream divergence, commits
+  unique to the current branch, and an [early notice](#git-prefetch) about remote changes.
 - Compact working-directory display with the current directory and an
-abbreviated parent.
-- A [hotkey](#quickly-copy-the-current-directory) to quickly copy the current working directory.
+  abbreviated parent.
+- A [hotkey](#quickly-copy-the-current-directory) to quickly copy the current
+  working directory.
 - Command and pipeline status indication.
-- Python [virtual environments](#python-virtual-environments), nested shell levels, and
-background jobs when present.
+- Python [virtual environments](#python-virtual-environments), nested shell levels,
+  and background jobs when present.
 - Informative continuation prompts for incomplete multiline commands.
 - Supports Oh My Zsh, Zsh plugin managers, and direct installation.
 
