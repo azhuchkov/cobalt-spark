@@ -197,16 +197,43 @@ For best compatibility with other plugins, place this binding near the end of
 
 ## Terminal setup
 
-Use a dark terminal color scheme, such as [Tokyo Night](https://github.com/tokyo-night/tokyo-night-vscode-theme#other-ports)
-(used in the screenshots), [Catppuccin Macchiato](https://catppuccin.com/ports/?c=terminal),
-or [One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal)—the latter is particularly well suited to long terminal sessions.
+### Color scheme
 
-Use a font that includes the lightning bolt (`⚡`). Most [Nerd Fonts](https://www.nerdfonts.com/) work;
-[JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip)
-is recommended. In this font, files with the `NL` suffix contain no
-[ligatures](https://en.wikipedia.org/wiki/Ligature_(writing)), while the `Mono` variant,
-identified by an additional `Mono` in the file name, renders some icons at a smaller size
-but is generally considered safer for terminals. The screenshots use the regular (non-`Mono`) variant.
+Use a dark terminal color scheme, such as
+[Tokyo Night](https://github.com/tokyo-night/tokyo-night-vscode-theme#other-ports)
+(used in the screenshots) or
+[Catppuccin Macchiato](https://catppuccin.com/ports/?c=terminal).
+For a quieter, more subdued look during long terminal sessions,
+[One Dark](https://github.com/nathanbuchar/atom-one-dark-terminal)
+is a good choice.
+
+### Font
+
+Use a font that includes the lightning bolt (`⚡`).
+To match the screenshots, use
+[JetBrains Mono Nerd Font Complete v2.3.3](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip):
+newer versions have a different lightning glyph.
+
+<details>
+<summary>Which font files should I install?</summary>
+
+The archive contains several variants and styles:
+
+- **`NL`** — no ligatures. Choose this variant if you prefer characters
+  such as `!=` and `->` to remain visually separate, regardless of your
+  terminal's ligature settings.
+- **An additional `Mono` after `Nerd Font Complete`** — fits icons into
+  a single character cell, making some icons smaller. This is separate
+  from `Mono` in the base name `JetBrains Mono`.
+  The variant without this additional `Mono` allows larger icons and
+  is used in the screenshots.
+- **`Regular`, `Bold`, `Italic`, and `Bold Italic`** — different styles
+  of the same variant; install the styles you need.
+
+The `NL` and icon-width choices are independent. Choose your preferred
+combination, install its font files, and select it in your terminal settings.
+
+</details>
 
 ## Tips & Tricks
 
