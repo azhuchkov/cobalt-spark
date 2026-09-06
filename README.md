@@ -95,6 +95,43 @@ Then source the standard plugin entry point from `~/.zshrc`:
 source ~/.cobalt-spark/cobalt-spark.plugin.zsh
 ```
 
+## Reading the prompt
+
+### Command status
+
+The leading `•` shows the previous command's status:
+
+- **Gray** — the command succeeded.
+- **Red** — the command returned a non-zero exit status.
+- **Yellow** — the last pipeline stage succeeded, but an earlier stage failed (excluding `SIGPIPE`).
+
+### Git indicators
+
+The Git segment shows the current branch, or `@` followed by a tag or commit
+hash when `HEAD` is detached.
+
+- `*` — uncommitted changes; red if there are unresolved conflicts.
+- `!` — a Git operation is in progress, such as a merge or rebase; red if
+  there are unresolved conflicts.
+- `↑` / `↑3` — one / three commits ahead of upstream.
+- `↓` — behind upstream; may appear together with `↑`.
+- `⇣` — incoming commits detected by [Git prefetch](#git-prefetch), before
+  an explicit fetch.
+- `⇡` — commits unique to this branch, absent from other branches and tags.
+  Shown when no upstream is configured and the repository has a remote.
+- `…/` — a shortened branch prefix, such as `feature/`.
+
+Indicators follow this priority: **Git operation → uncommitted changes →
+commit divergence**. For example, editing a file replaces the arrows with
+`*`; they return when the working tree is clean.
+
+### Other context
+
+- `[2]` before the directory — nested shell level.
+- `&` on the right — background jobs; yellow if any are suspended.
+- `[.env]` on the right — active Python virtual environment.
+- `⚡` — the start of your command.
+
 ## Configuration
 
 Cobalt Spark works without additional configuration. The settings below are
