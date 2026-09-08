@@ -32,9 +32,9 @@ using `robbyrussell`](https://github.com/user-attachments/assets/699dfd18-4705-4
 ## Installation
 
 > [!NOTE]
-> Live Git updates require [fswatch](https://github.com/emcrisostomo/fswatch).
-> Install it with your package manager if you want the Git segment to update
-> automatically while the prompt is idle.
+> To enable [Live Git](#live-git-updates) updates, install 
+> [fswatch](https://github.com/emcrisostomo/fswatch) with your package manager.
+> You can skip this step if you don’t need automatic updates while the prompt is idle.
 
 Choose the setup that matches your Zsh environment:
 
