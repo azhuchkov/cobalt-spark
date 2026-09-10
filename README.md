@@ -198,17 +198,15 @@ For best compatibility with other plugins, place this binding near the end of
 
 ### Theme options
 
-- `COBALT_SPARK_THEME_GIT_HIDDEN_PREFIXES` lists branch prefixes collapsed to
-  `…` in the Git segment when followed by `/`. The defaults are `feature`,
-  `feat`, `bugfix`, `chore`, `docs`, `refactor`, and `fix`. Assign an empty
-  array (`COBALT_SPARK_THEME_GIT_HIDDEN_PREFIXES=()`) to show full branch names.
-- `COBALT_SPARK_THEME_PARENT_CAP` controls how many leading characters of the
-  parent directory name are retained when it is abbreviated. The default is
-  `5`. Set it to `0` to hide the parent directory entirely.
-- Set `COBALT_SPARK_THEME_PROMPT_SIGN` to use a different prompt anchor, for
-  example `COBALT_SPARK_THEME_PROMPT_SIGN=' % '`. You can also make the prompt
-  **multiline** by embedding a line break:
-  `COBALT_SPARK_THEME_PROMPT_SIGN=$'\n⚡'`.
+| Option | Default | Effect |
+| --- | --- | --- |
+| `COBALT_SPARK_THEME_GIT_HIDDEN_PREFIXES` | `(feature feat bugfix chore docs refactor fix)` | Branch prefixes collapsed to `…` when followed by `/`. Set to `()` to show full branch names. |
+| `COBALT_SPARK_THEME_PARENT_CAP` | `5` | Leading characters retained in the abbreviated parent directory. Set to `0` to hide the parent. |
+| `COBALT_SPARK_THEME_PROMPT_SIGN` | Space + `⚡` | Prompt anchor; supports embedded line breaks. |
+
+For a different prompt anchor, set `COBALT_SPARK_THEME_PROMPT_SIGN=' % '`.
+To make the prompt **multiline**, embed a line break:
+`COBALT_SPARK_THEME_PROMPT_SIGN=$'\n⚡'`.
 
 ## Terminal setup
 
