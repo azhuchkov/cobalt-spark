@@ -1,9 +1,9 @@
 # Cobalt Spark
 
-Cobalt Spark is a compact Zsh theme designed for everyday work. Restrained
-colors keep essential context visible without competing with command output,
-while a prominent lightning anchor makes command lines easy to find when
-scanning the terminal.
+Cobalt Spark is a compact Zsh theme with [live Git updates](#live-git-updates),
+designed for everyday work. Restrained colors keep essential context visible 
+without competing with command output, while a prominent lightning anchor makes 
+command lines easy to find when scanning the terminal.
 
 <img width="1000" alt="Cobalt Spark live Git preview" src="https://github.com/user-attachments/assets/2cdc71b3-7258-4f6a-8d93-a54aef610def" />
 
