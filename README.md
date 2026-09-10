@@ -36,7 +36,8 @@ using `robbyrussell`](https://github.com/user-attachments/assets/699dfd18-4705-4
 > [fswatch](https://github.com/emcrisostomo/fswatch) with your package manager.
 > You can skip this step if you don’t need automatic updates while the prompt is idle.
 
-Choose the setup that matches your Zsh environment:
+Choose the setup that matches your Zsh environment. After editing `~/.zshrc`,
+open a new Zsh session to activate the theme.
 
 ### Oh My Zsh
 
@@ -138,8 +139,22 @@ commit divergence**. For example, editing a file replaces the arrows with
 ## Configuration
 
 Cobalt Spark works without additional configuration. The settings below are
-shell variables; put persistent values in `~/.zshrc`. The live watcher reads
-its settings when it starts.
+shell variables; put persistent values in `~/.zshrc` before loading the theme.
+For Oh My Zsh, place them before `source $ZSH/oh-my-zsh.sh`; for plugin managers
+or direct installation, place them before the command that loads Cobalt Spark.
+The live watcher reads its settings when it starts.
+
+For example, an Oh My Zsh configuration could include:
+
+```zsh
+ZSH_THEME="cobalt-spark/cobalt-spark"
+COBALT_SPARK_THEME_GIT_HIDDEN_PREFIXES=(feature feat fix)
+COBALT_SPARK_THEME_PARENT_CAP=3
+COBALT_SPARK_THEME_LIVE_GIT_LATENCY=1.5
+
+# Keep your existing Oh My Zsh load command after the settings.
+source "$ZSH/oh-my-zsh.sh"
+```
 
 ### Live Git updates
 
@@ -186,10 +201,10 @@ For best compatibility with other plugins, place this binding near the end of
 - `COBALT_SPARK_THEME_GIT_HIDDEN_PREFIXES` lists branch prefixes collapsed to
   `…` in the Git segment when followed by `/`. The defaults are `feature`,
   `feat`, `bugfix`, `chore`, `docs`, `refactor`, and `fix`. Assign an empty
-  array to show full branch names.
+  array (`COBALT_SPARK_THEME_GIT_HIDDEN_PREFIXES=()`) to show full branch names.
 - `COBALT_SPARK_THEME_PARENT_CAP` controls how many leading characters of the
-  parent directory name are retained when it is abbreviated. Set it to `0`
-  to hide the parent directory entirely.
+  parent directory name are retained when it is abbreviated. The default is
+  `5`. Set it to `0` to hide the parent directory entirely.
 - Set `COBALT_SPARK_THEME_PROMPT_SIGN` to use a different prompt anchor, for
   example `COBALT_SPARK_THEME_PROMPT_SIGN=' % '`. You can also make the prompt
   **multiline** by embedding a line break:
