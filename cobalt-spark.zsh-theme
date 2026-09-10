@@ -49,12 +49,273 @@ __cobalt_spark_pwd_prompt_info() {
   print -r -- "%F{67}${parent//\%/%%}%F{75}/${base//\%/%%}"
 }
 
+# Return the budget in REPLY, or fail when a multiline sign disables shortening.
+__cobalt_spark_git_ref_budget() {
+  local prompt_sign cwd_prompt
+  local git_mark=${1//\%F\{<->\}/}
+  local -i detached=${2:-0}
+  local -i cwd_end_column
+  local -ir desired_command_space_percent=60
+  local -ir prompt_status_width=1 prompt_segment_spacing=1
+  local -ir git_segment_braces_width=2
+
+  REPLY=
+  (( COLUMNS > 0 )) || return 1
+  prompt_sign=${COBALT_SPARK_THEME_PROMPT_SIGN-$__cobalt_spark_default_prompt_sign}
+  # Skip in multiline mode.
+  [[ $prompt_sign == *$'\n'* ]] && return 1
+
+  # The text-presentation selector does not occupy a terminal cell.
+  prompt_sign=${prompt_sign//$'\uFE0E'/}
+  cwd_prompt=$(__cobalt_spark_pwd_prompt_info)
+  cwd_prompt=${cwd_prompt//\%F\{<->\}/}
+  cwd_prompt=${cwd_prompt//\%\%/%}
+  # Wrapped cwd text only occupies its final line when budgeting the Git ref.
+  cwd_end_column=$(( (prompt_status_width + prompt_segment_spacing +
+    (SHLVL > 1 ? ${#SHLVL} + 3 : 0) + ${#cwd_prompt}) % COLUMNS ))
+  # Color escapes take no space; detached refs also have an @ prefix.
+  REPLY=$(( COLUMNS - cwd_end_column - ${#prompt_sign} -
+    prompt_segment_spacing - git_segment_braces_width -
+    ${#git_mark} - detached -
+    COLUMNS * desired_command_space_percent / 100 ))
+}
+
+__cobalt_spark_shorten_git_ref() {
+  emulate -L zsh
+
+  local ref=$1
+  local char word pending leading trailing rendered
+  local -a words separators prefix_lengths shortened
+  local -i ref_budget=$2 target_length index word_count total_length
+  local -i current_length longest_index longest_length
+  local -i first_content_index omitted_first omitted_last left_index right_index
+  local -i removable_first removable_last left_remaining right_remaining
+  local -i left_length right_length
+  local -i excess reduction_amount separator_length available_space
+  local -i ellipsis_width
+  local -i restored
+  local -ir minimum_ref_length=12
+  local -ir minimum_word_prefix_length=5
+
+  REPLY=$ref
+
+  (( target_length = ref_budget > minimum_ref_length ?
+    ref_budget : minimum_ref_length ))
+  if (( ${#ref} <= target_length )); then
+    return
+  fi
+
+  # Keep separator runs outside the words so every original separator can be
+  # retained when words are shortened or omitted.
+  for char in ${(s::)ref}; do
+    if [[ $char == [/_-] ]]; then
+      if [[ -n $word ]]; then
+        words+=("$word")
+        word=
+      fi
+      pending+=$char
+    else
+      if [[ -n $pending ]]; then
+        if (( ${#words} )); then
+          separators+=("$pending")
+        else
+          leading=$pending
+        fi
+        pending=
+      fi
+      word+=$char
+    fi
+  done
+  [[ -n $word ]] && words+=("$word")
+  trailing=$pending
+
+  word_count=${#words}
+  if (( ! word_count )); then
+    (( left_length = target_length / 2 ))
+    (( right_length = target_length - left_length - 1 ))
+    REPLY="${ref[1,left_length]}…${ref[-right_length,-1]}"
+    return
+  fi
+  first_content_index=1
+  if (( word_count > 1 )) &&
+      [[ $words[1] == '…' && $separators[1] == /* ]]; then
+    first_content_index=2
+  fi
+  total_length=${#ref}
+  for (( index = 1; index <= word_count; ++index )); do
+    prefix_lengths[index]=${#words[index]}
+    shortened[index]=0
+  done
+
+  # Shorten the longest word first, breaking ties from right to left.
+  while (( total_length > target_length )); do
+    longest_index=0
+    longest_length=$(( minimum_word_prefix_length + 1 ))
+    for (( index = word_count; index >= 1; --index )); do
+      current_length=$(( prefix_lengths[index] + shortened[index] ))
+      if (( current_length > longest_length )); then
+        longest_index=$index
+        longest_length=$current_length
+      fi
+    done
+    (( longest_index )) || break
+    # The first reduction also needs room for the ellipsis.
+    (( prefix_lengths[longest_index] -= 2 - shortened[longest_index] ))
+    shortened[longest_index]=1
+    (( --total_length ))
+  done
+
+  # Once useful word prefixes are exhausted, replace a contiguous middle
+  # range with one ellipsis. Keep the first and last words for orientation.
+  if (( total_length > target_length &&
+        word_count > first_content_index + 1 )); then
+    removable_first=$(( first_content_index + 1 ))
+    removable_last=$(( word_count - 1 ))
+    # Integer division selects the right-hand word when there are two middle
+    # candidates. Further omissions expand around this fixed center.
+    omitted_first=$(( removable_first +
+      (removable_last - removable_first + 1) / 2 ))
+    omitted_last=$omitted_first
+    left_index=$(( omitted_first - 1 ))
+    right_index=$omitted_last
+    (( total_length -= prefix_lengths[omitted_first] +
+      shortened[omitted_first] + ${#separators[left_index]} +
+      ${#separators[right_index]} - 1 ))
+    (( total_length -= shortened[left_index] ))
+
+    while (( total_length > target_length )); do
+      left_index=$(( omitted_first - 1 ))
+      right_index=$(( omitted_last + 1 ))
+      (( left_index > first_content_index || right_index < word_count )) || break
+      left_remaining=$(( omitted_first - removable_first ))
+      right_remaining=$(( removable_last - omitted_last ))
+
+      if (( right_remaining > 0 && left_remaining <= right_remaining )); then
+        separator_length=${#separators[right_index]}
+        (( total_length -= prefix_lengths[right_index] +
+          shortened[right_index] + separator_length ))
+        omitted_last=$right_index
+      else
+        separator_length=${#separators[left_index - 1]}
+        # The omission marker already represents a shortened left neighbor's
+        # ellipsis, so only that neighbor's retained prefix is still visible.
+        (( total_length -= prefix_lengths[left_index] + separator_length ))
+        omitted_first=$left_index
+        (( total_length -= shortened[omitted_first - 1] ))
+      fi
+    done
+
+    # Removing whole words can free more space than was needed. Give that
+    # space back to the retained words evenly instead of leaving their earlier
+    # abbreviations unnecessarily short.
+    available_space=$(( target_length - total_length ))
+    while (( available_space > 0 )); do
+      restored=0
+      for (( index = 1; available_space > 0 && index <= word_count; ++index )); do
+        (( index >= omitted_first && index <= omitted_last )) && continue
+        current_length=${#words[index]}
+        if (( index == omitted_first - 1 )); then
+          # This word shares the omission marker, even when fully restored.
+          (( prefix_lengths[index] < current_length )) || continue
+        else
+          (( shortened[index] )) || continue
+        fi
+        (( ++prefix_lengths[index] ))
+        if (( index != omitted_first - 1 &&
+              prefix_lengths[index] == current_length - 1 )); then
+          prefix_lengths[index]=$current_length
+          shortened[index]=0
+        fi
+        (( --available_space, ++total_length, ++restored ))
+      done
+      (( restored )) || break
+    done
+  fi
+
+  # If the retained words and separators still cannot fit, shorten retained
+  # word suffixes below the usual minimum while keeping each initial letter.
+  excess=$(( total_length - target_length ))
+  for (( index = word_count; excess > 0 && index >= 1; --index )); do
+    if (( omitted_first && index >= omitted_first && index <= omitted_last )); then
+      continue
+    fi
+    # The middle omission marker also serves as the preceding word's ellipsis.
+    ellipsis_width=$(( omitted_first && index == omitted_first - 1 ?
+      0 : 1 ))
+    current_length=$(( prefix_lengths[index] +
+      (ellipsis_width ? shortened[index] : 0) ))
+    reduction_amount=$(( current_length - 1 - ellipsis_width ))
+    (( reduction_amount > excess )) && reduction_amount=$excess
+    if (( reduction_amount > 0 )); then
+      prefix_lengths[index]=$((
+        current_length - reduction_amount - ellipsis_width ))
+      shortened[index]=1
+      (( excess -= reduction_amount ))
+    fi
+  done
+
+  # Long separator runs are the only remaining reducible content. Keep one
+  # original separator at each displayed boundary whenever possible.
+  for (( index = word_count - 1; excess > 0 && index >= 1; --index )); do
+    if (( omitted_first &&
+          index >= omitted_first - 1 && index <= omitted_last )); then
+      continue
+    fi
+    separator_length=${#separators[index]}
+    reduction_amount=$(( separator_length - 1 ))
+    (( reduction_amount > excess )) && reduction_amount=$excess
+    if (( reduction_amount > 0 )); then
+      separator_length=$(( separator_length - reduction_amount ))
+      separators[index]="${separators[index][1,separator_length - 1]}…"
+      (( excess -= reduction_amount ))
+    fi
+  done
+  if (( excess > 0 && ${#trailing} )); then
+    separator_length=${#trailing}
+    reduction_amount=$(( separator_length - 1 < excess ?
+      separator_length - 1 : excess ))
+    if (( reduction_amount > 0 )); then
+      trailing="${trailing[1,separator_length - reduction_amount - 1]}…"
+      (( excess -= reduction_amount ))
+    fi
+  fi
+  if (( excess > 0 && ${#leading} )); then
+    separator_length=${#leading}
+    reduction_amount=$(( separator_length - 1 < excess ?
+      separator_length - 1 : excess ))
+    if (( reduction_amount > 0 )); then
+      leading="${leading[1,separator_length - reduction_amount - 1]}…"
+      (( excess -= reduction_amount ))
+    fi
+  fi
+
+  rendered=$leading
+  for (( index = 1; index <= word_count; ++index )); do
+    if (( omitted_first && index == omitted_first )); then
+      rendered+='…'
+    elif (( ! omitted_first || index < omitted_first || index > omitted_last )); then
+      rendered+="${words[index][1,prefix_lengths[index]]}"
+      if (( shortened[index] &&
+            (! omitted_first || index != omitted_first - 1) )); then
+        rendered+='…'
+      fi
+    fi
+    if (( index < word_count &&
+          (! omitted_first ||
+           index < omitted_first - 1 || index > omitted_last) )); then
+      rendered+=$separators[index]
+    fi
+  done
+  REPLY="${rendered}${trailing}"
+}
+
 # OMZ runs this producer in both synchronous and async git_prompt_info modes.
 _omz_git_prompt_info() {
   local IFS=$' \t\n'
-  local git_dir ref branch branch_prefix upstream upstream_ref
+  local git_dir ref branch branch_prefix upstream_ref
   local mark relation ahead behind detached
   local config line hide_info has_remote divergence
+  local REPLY
 
   git_dir=$(__git_prompt_git rev-parse --git-dir 2>/dev/null) || return 0
   # Read hide-info and remote presence together because this runs every prompt.
@@ -84,16 +345,6 @@ _omz_git_prompt_info() {
     detached=1
     ref=$(__git_prompt_git describe --tags --exact-match HEAD 2>/dev/null) ||
       ref=$(__git_prompt_git rev-parse --short HEAD 2>/dev/null) || return 0
-  fi
-
-  # Prevent Git-provided names from being interpreted as prompt escapes.
-  ref=${ref//\%/%%}
-  (( detached )) && ref="%F{152}@%F{109}${ref}"
-
-  # Preserve Oh My Zsh's opt-in display of the configured upstream name.
-  if (( ! detached && ${+ZSH_THEME_GIT_SHOW_UPSTREAM} )); then
-    upstream=$(__git_prompt_git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null) &&
-      upstream=" -> ${upstream//\%/%%}"
   fi
 
   # Show only the highest-priority state: operation, dirty tree, or relation.
@@ -141,7 +392,16 @@ _omz_git_prompt_info() {
     fi
   fi
 
-  echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref}${upstream}${mark}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+  if __cobalt_spark_git_ref_budget "$mark" "${detached:-0}"; then
+    __cobalt_spark_shorten_git_ref "$ref" "$REPLY"
+    ref=$REPLY
+  fi
+
+  # Prevent Git-provided names from being interpreted as prompt escapes.
+  ref=${ref//\%/%%}
+  (( detached )) && ref="%F{152}@%F{109}${ref}"
+
+  echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref}${mark}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
 }
 
 #
