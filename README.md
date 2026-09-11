@@ -41,11 +41,10 @@ The [script](try.zsh) starts a temporary session without your usual plugins
 or `.zshrc`. Type `exit` to return and remove the temporary copy.
 Requires Zsh, Git, and curl.
 
-> [!TIP]
-> Use a dark terminal color scheme. To match the screenshots or fix missing
-> symbols, see [Terminal setup](#terminal-setup).
-> Install [fswatch](https://github.com/emcrisostomo/fswatch) to try
-> [live Git updates](#live-git-updates).
+Use a dark terminal color scheme. To match the screenshots or fix missing
+symbols, see [Terminal setup](#terminal-setup).
+Install [fswatch](https://github.com/emcrisostomo/fswatch) to try
+[live Git updates](#live-git-updates).
 
 ## Installation
 
