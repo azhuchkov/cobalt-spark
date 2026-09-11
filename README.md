@@ -29,6 +29,24 @@ using `robbyrussell`](https://github.com/user-attachments/assets/699dfd18-4705-4
 - Informative continuation prompts for incomplete multiline commands.
 - Supports Oh My Zsh, Zsh plugin managers, and direct installation.
 
+## Try it
+
+Try Cobalt Spark without changing your configuration. Run from Zsh or Bash:
+
+```sh
+zsh -f <(curl -fsSL https://raw.githubusercontent.com/azhuchkov/cobalt-spark/main/try.zsh)
+```
+
+The [script](try.zsh) starts a temporary session without your usual plugins
+or `.zshrc`. Type `exit` to return and remove the temporary copy.
+Requires Zsh, Git, and curl.
+
+> [!TIP]
+> Use a dark terminal color scheme. To match the screenshots or fix missing
+> symbols, see [Terminal setup](#terminal-setup).
+> Install [fswatch](https://github.com/emcrisostomo/fswatch) to try
+> [live Git updates](#live-git-updates).
+
 ## Installation
 
 > [!NOTE]
