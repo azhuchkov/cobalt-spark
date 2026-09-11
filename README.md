@@ -13,7 +13,7 @@ using `robbyrussell`](https://github.com/user-attachments/assets/699dfd18-4705-4
 
 ## Overview
 
-- ⚡[Live Git](#live-git-updates) updates: the Git segment refreshes automatically
+- [Live Git](#live-git-updates) updates: the Git segment refreshes automatically
   when an IDE, coding agent, or another terminal changes the repository—without
   pressing Enter.
 - Compact Git segment with [configurable branch prefix shortening](#theme-options),
