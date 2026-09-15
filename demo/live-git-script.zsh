@@ -10,7 +10,7 @@ for tool in git tmux fswatch zsh; do
   fi
 done
 
-theme_file="${0:A:h}/cobalt-spark.plugin.zsh"
+theme_file="${0:A:h:h}/cobalt-spark.plugin.zsh"
 host_zdotdir=${ZDOTDIR:-$HOME}
 host_zshrc="$host_zdotdir/.zshrc"
 if [[ ! -r $host_zshrc ]]; then
