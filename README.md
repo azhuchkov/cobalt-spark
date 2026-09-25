@@ -116,6 +116,28 @@ Then source the standard plugin entry point from `~/.zshrc`:
 source ~/.cobalt-spark/cobalt-spark.plugin.zsh
 ```
 
+## Updating
+
+To update Cobalt Spark to the latest version, follow the instructions for your installation method.
+
+**Oh My Zsh:**
+
+```sh
+git -C "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/cobalt-spark" pull --ff-only
+```
+
+**Zsh plugin managers:** update `azhuchkov/cobalt-spark` using your plugin manager's update command.
+
+**Direct installation:**
+
+```sh
+git -C ~/.cobalt-spark pull --ff-only
+```
+
+If you cloned the repository elsewhere, adjust the path accordingly.
+
+After updating, open a new terminal tab or window to load the updated theme.
+
 ## Reading the prompt
 
 ### Command status
