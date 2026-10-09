@@ -57,8 +57,12 @@ GIT_TERMINAL_PROMPT=0 command git clone --quiet --depth=1 --branch=main \
 command cat > "$demo_tmp/.zshrc" <<'ZSHRC' || exit 1
 unset HISTFILE
 SAVEHIST=0
+setopt AUTO_CD
 autoload -Uz compinit
 compinit -D
+if zmodload zsh/complist 2>/dev/null; then
+  zstyle ':completion:*' menu select
+fi
 source "$ZDOTDIR/theme/cobalt-spark.plugin.zsh"
 ZSHRC
 
@@ -66,6 +70,7 @@ ZSHRC
 for demo_plugin_path in "${demo_plugin_paths[@]}"; do
   print -r -- "source ${(q)demo_plugin_path}" >> "$demo_tmp/.zshrc" || exit 1
 done
+print -r -- "bindkey '^X^P' cobalt-spark-copy-cwd" >> "$demo_tmp/.zshrc" || exit 1
 
 demo_revision=$(command git --no-pager -C "$demo_tmp/theme" log -1 \
   --no-show-signature --no-color --format='  ✓ Done: %h — %B' HEAD) || exit 1
@@ -107,7 +112,11 @@ if (( ! $+commands[fswatch] )); then
   fi
 fi
 print
-print -- "→ Starting isolated demo session... Type 'exit' to return."
+print -- '→ Starting isolated demo session...'
+print
+printf '  %-14s  %s\n' \
+  'Ctrl+X, Ctrl+P' 'Copy current directory' \
+  'exit' 'Return to your shell'
 print
 
 ZDOTDIR="$demo_tmp" SHLVL=0 command zsh -di
