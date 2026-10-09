@@ -57,6 +57,8 @@ GIT_TERMINAL_PROMPT=0 command git clone --quiet --depth=1 --branch=main \
 command cat > "$demo_tmp/.zshrc" <<'ZSHRC' || exit 1
 unset HISTFILE
 SAVEHIST=0
+autoload -Uz compinit
+compinit -D
 source "$ZDOTDIR/theme/cobalt-spark.plugin.zsh"
 ZSHRC
 
