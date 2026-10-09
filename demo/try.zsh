@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+# A sourced demo must leave the caller's options, variables, and traps intact.
+(
 emulate -R zsh
 
 if [[ ! -t 0 || ! -t 1 ]]; then
@@ -10,6 +12,34 @@ fi
 if (( ! $+commands[git] )); then
   print -u2 -- 'Git is required to try Cobalt Spark.'
   exit 1
+fi
+
+if [[ $ZSH_EVAL_CONTEXT != *:file* ]]; then
+  print -- 'Tip: run this script with source to reuse supported plugins from your current Zsh session.'
+  print
+fi
+
+typeset -a demo_plugin_paths=()
+if zmodload zsh/parameter 2>/dev/null; then
+  for demo_plugin demo_plugin_function in \
+    zsh-autosuggestions _zsh_autosuggest_start \
+    zsh-syntax-highlighting _zsh_highlight
+  do
+    (( $+functions[$demo_plugin_function] )) || continue
+
+    demo_plugin_source=${functions_source[$demo_plugin_function]}
+    # Reload the entry point, rather than a helper file or compiled function.
+    demo_plugin_path="${demo_plugin_source:h}/$demo_plugin.zsh"
+
+    if [[ -n $demo_plugin_source && -f $demo_plugin_path && -r $demo_plugin_path ]]; then
+      demo_plugin_paths+=("${demo_plugin_path:A}")
+      print -r -- "✓ Detected '$demo_plugin'"
+    fi
+  done
+fi
+
+if (( ${#demo_plugin_paths} )); then
+  print
 fi
 
 demo_tmp=$(mktemp -d "${TMPDIR:-/tmp}/cobalt-spark.XXXXXXXX") || exit 1
@@ -30,8 +60,13 @@ SAVEHIST=0
 source "$ZDOTDIR/theme/cobalt-spark.plugin.zsh"
 ZSHRC
 
+# The detection order keeps syntax highlighting after the theme and other plugins.
+for demo_plugin_path in "${demo_plugin_paths[@]}"; do
+  print -r -- "source ${(q)demo_plugin_path}" >> "$demo_tmp/.zshrc" || exit 1
+done
+
 demo_revision=$(command git --no-pager -C "$demo_tmp/theme" log -1 \
-  --no-show-signature --no-color --format='  Done: %h — %B' HEAD) || exit 1
+  --no-show-signature --no-color --format='  ✓ Done: %h — %B' HEAD) || exit 1
 # Git's %s folds the opening paragraph; keep only the literal first line.
 print -r -- "${demo_revision%%$'\n'*}"
 
@@ -70,7 +105,8 @@ if (( ! $+commands[fswatch] )); then
   fi
 fi
 print
-print -- "Starting temporary session. Type 'exit' to return."
+print -- "→ Starting isolated demo session... Type 'exit' to return."
 print
 
 ZDOTDIR="$demo_tmp" SHLVL=0 command zsh -di
+)
