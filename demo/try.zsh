@@ -115,7 +115,7 @@ print
 print -- '→ Starting isolated demo session...'
 print
 printf '  %-14s  %s\n' \
-  'Ctrl+X, Ctrl+P' 'Copy current directory' \
+  'Ctrl+X, Ctrl+P' 'Copy current directory path' \
   'exit' 'Return to your shell'
 print
 
