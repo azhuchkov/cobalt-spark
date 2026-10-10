@@ -24,6 +24,7 @@ jobs:
         run: |
           shopt -s globstar failglob
           for file in **/*.zsh **/*.zsh-theme; do
+            echo "Checking syntax: $file"
             zsh -n "$file"
           done
 
