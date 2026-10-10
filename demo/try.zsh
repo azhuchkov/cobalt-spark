@@ -59,7 +59,7 @@ unset HISTFILE
 SAVEHIST=0
 setopt AUTO_CD
 autoload -Uz compinit
-compinit -D
+compinit -D -i
 if zmodload zsh/complist 2>/dev/null; then
   zstyle ':completion:*' menu select
 fi
