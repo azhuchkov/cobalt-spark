@@ -1,0 +1,55 @@
+name: Try it [smoke test]
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  try-it:
+    name: Run 'Try it' demo
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Install Zsh
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh
+
+      - name: Extract 'Try it' command from README
+        run: |
+          curl -fsSL \
+            https://raw.githubusercontent.com/azhuchkov/cobalt-spark/main/README.md \
+            -o "$RUNNER_TEMP/README.md"
+
+          command=$(awk '
+            /^## Try it$/ { section=1; next }
+            section && /^```zsh$/ { getline; print; exit }
+          ' "$RUNNER_TEMP/README.md")
+
+          [[ -n $command ]] || {
+            echo "::error::Try it command not found in README"
+            exit 1
+          }
+
+          echo "TRY_IT_COMMAND=$command" >> "$GITHUB_ENV"
+
+      - name: Run 'Try it' command
+        run: |
+          printf 'exit\n' |
+            timeout 120s script -q -e -c \
+              'zsh -fic "$TRY_IT_COMMAND"' /dev/null |
+            tee "$RUNNER_TEMP/try-it.log"
+
+          grep -Fq 'Starting isolated demo session' \
+            "$RUNNER_TEMP/try-it.log"
+
+      - name: Upload 'Try it' log as a job artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: try-it-log
+          path: ${{ runner.temp }}/try-it.log
+          retention-days: 7
+          if-no-files-found: warn
