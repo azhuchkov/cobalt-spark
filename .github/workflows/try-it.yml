@@ -12,10 +12,10 @@ jobs:
     timeout-minutes: 3
 
     steps:
-      - name: Install Zsh
+      - name: Install Zsh and Expect
         run: |
           sudo apt-get update
-          sudo apt-get install -y zsh
+          sudo apt-get install -y zsh expect
 
       - name: Extract 'Try it' command from README
         run: |
@@ -37,13 +37,41 @@ jobs:
 
       - name: Run 'Try it' command
         run: |
-          printf 'exit\n' |
-            timeout 120s script -q -e -c \
-              'zsh -fic "$TRY_IT_COMMAND"' /dev/null |
-            tee "$RUNNER_TEMP/try-it.log"
+          expect <<'EXPECT'
+          set timeout 90
+          log_file -noappend "$env(RUNNER_TEMP)/try-it.log"
 
-          grep -Fq 'Starting isolated demo session' \
-            "$RUNNER_TEMP/try-it.log"
+          spawn zsh -fic $env(TRY_IT_COMMAND)
+
+          expect {
+            -re {compinit: insecure directories} {
+              puts stderr "Completion initialization requires confirmation"
+              exit 1
+            }
+            -exact "⚡" {}
+            timeout {
+              puts stderr "Timed out waiting for Cobalt Spark prompt"
+              exit 1
+            }
+            eof {
+              puts stderr "Demo exited before displaying the prompt"
+              exit 1
+            }
+          }
+
+          send -- "exit\r"
+
+          expect {
+            eof {}
+            timeout {
+              puts stderr "Timed out waiting for demo to exit"
+              exit 1
+            }
+          }
+
+          set result [wait]
+          exit [lindex $result 3]
+          EXPECT
 
       - name: Upload 'Try it' log as a job artifact
         if: always()
