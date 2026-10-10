@@ -1,0 +1,49 @@
+
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  syntax-check:
+    name: Zsh syntax check
+    runs-on: ubuntu-latest
+
+    steps:
+      - &checkout
+        name: Check out source code
+        uses: actions/checkout@v4
+
+      - &install-zsh
+        name: Install Zsh (Linux only)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh
+
+      - name: Check syntax of Zsh scripts and theme files
+        run: |
+          shopt -s globstar failglob
+          for file in **/*.zsh **/*.zsh-theme; do
+            zsh -n "$file"
+          done
+
+  plugin-init-check:
+    name: Plugin initialization check (${{ matrix.os }})
+    needs: syntax-check
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - *checkout
+      - *install-zsh
+
+      - name: Source plugin and verify PROMPT and Git-ref shortening function
+        run: |
+          zsh -efic '
+            source ./cobalt-spark.plugin.zsh
+            (( $+functions[__cobalt_spark_shorten_git_ref] ))
+            [[ $PROMPT == *git_prompt_info* ]]
+          '
