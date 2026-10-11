@@ -89,4 +89,4 @@ jobs:
               exit 1
             }
             print -r -- "Cobalt Spark loaded successfully"
-          '
+          ' </dev/null
