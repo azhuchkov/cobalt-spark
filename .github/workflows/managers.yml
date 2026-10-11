@@ -25,8 +25,9 @@ jobs:
     steps:
       - name: Install Zsh
         run: |
-          sudo apt-get update
+          sudo apt-get update -qq
           sudo apt-get install -y zsh
+          zsh --version
 
       - name: Fix Zsh completion insecurities
         run: |
@@ -46,8 +47,9 @@ jobs:
 
           case "$METHOD" in
             oh-my-zsh)
-              git clone --quiet --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "$ZDOTDIR/oh-my-zsh"
-              git clone --quiet --depth=1 https://github.com/azhuchkov/cobalt-spark.git \
+              git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git \
+                "$ZDOTDIR/oh-my-zsh"
+              git clone --depth=1 https://github.com/azhuchkov/cobalt-spark.git \
                 "$ZDOTDIR/oh-my-zsh/custom/themes/cobalt-spark"
               cat > "$ZDOTDIR/.zshrc" <<'ZSHRC'
           ZSH="$ZDOTDIR/oh-my-zsh"
@@ -58,14 +60,16 @@ jobs:
           ZSHRC
               ;;
             zinit)
-              git clone --quiet --depth=1 https://github.com/zdharma-continuum/zinit.git "$ZDOTDIR/zinit"
+              git clone --depth=1 https://github.com/zdharma-continuum/zinit.git \
+                "$ZDOTDIR/zinit"
               cat > "$ZDOTDIR/.zshrc" <<'ZSHRC'
           source "$ZDOTDIR/zinit/zinit.zsh"
           zinit light azhuchkov/cobalt-spark
           ZSHRC
               ;;
             antigen)
-              git clone --quiet --depth=1 https://github.com/zsh-users/antigen.git "$ZDOTDIR/antigen"
+              git clone --depth=1 https://github.com/zsh-users/antigen.git \
+                "$ZDOTDIR/antigen"
               cat > "$ZDOTDIR/.zshrc" <<'ZSHRC'
           source "$ZDOTDIR/antigen/antigen.zsh"
           antigen bundle azhuchkov/cobalt-spark --branch=main
@@ -73,8 +77,8 @@ jobs:
           ZSHRC
               ;;
             zplug)
-              sudo apt-get install -y gawk # zplug does not support mawk
-              git clone --quiet --depth=1 https://github.com/zplug/zplug.git "$ZDOTDIR/zplug"
+              git clone --depth=1 https://github.com/zplug/zplug.git \
+                "$ZDOTDIR/zplug"
               cat > "$ZDOTDIR/.zshrc" <<'ZSHRC'
           export ZPLUG_HOME="$ZDOTDIR/zplug"
           source "$ZPLUG_HOME/init.zsh"
