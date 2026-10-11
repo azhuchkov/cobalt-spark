@@ -38,46 +38,21 @@ jobs:
       - name: Run 'Try it' command
         run: |
           expect <<'EXPECT'
-          set timeout 90
-          log_file -noappend "$env(RUNNER_TEMP)/try-it.log"
+            set timeout 90
+            spawn zsh -fic $env(TRY_IT_COMMAND)
 
-          spawn zsh -fic $env(TRY_IT_COMMAND)
-
-          expect {
-            -re {compinit: insecure directories} {
-              puts stderr "Completion initialization requires confirmation"
-              exit 1
+            expect {
+              -exact "⚡" {}
+              timeout { exit 1 }
+              eof { exit 1 }
             }
-            -exact "⚡" {}
-            timeout {
-              puts stderr "Timed out waiting for Cobalt Spark prompt"
-              exit 1
-            }
-            eof {
-              puts stderr "Demo exited before displaying the prompt"
-              exit 1
-            }
-          }
 
-          send -- "exit\r"
+            send -- "exit\r"
 
-          expect {
-            eof {}
-            timeout {
-              puts stderr "Timed out waiting for demo to exit"
-              exit 1
+            expect {
+              eof {}
+              timeout { exit 1 }
             }
-          }
 
-          set result [wait]
-          exit [lindex $result 3]
+            exit [lindex [wait] 3]
           EXPECT
-
-      - name: Upload 'Try it' log as a job artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: try-it-log
-          path: ${{ runner.temp }}/try-it.log
-          retention-days: 7
-          if-no-files-found: warn
