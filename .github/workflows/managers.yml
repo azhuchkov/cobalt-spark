@@ -30,7 +30,8 @@ jobs:
 
       - name: Fix Zsh completion insecurities
         run: |
-          for dir in /usr/local/share/zsh/{,site-functions}; do
+          for dir in /usr/share/zsh/{,vendor-completions} \
+              /usr/local/share/zsh/{,site-functions}; do
             if [[ -d $dir ]]; then
               sudo chmod go-w "$dir"
             fi
