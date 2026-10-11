@@ -28,6 +28,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y zsh
 
+      - name: Fix Zsh completion insecurities
+        run: |
+          for dir in /usr/local/share/zsh/{,site-functions}; do
+            if [[ -d $dir ]]; then
+              sudo chmod go-w "$dir"
+            fi
+          done
+          zsh -fc 'autoload -Uz compaudit; compaudit'
+
       - name: Install Cobalt Spark with ${{ matrix.method }}
         env:
           METHOD: ${{ matrix.method }}
