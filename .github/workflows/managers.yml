@@ -1,0 +1,92 @@
+name: Managers Support Check
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  install:
+    name: Install with ${{ matrix.method }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        method: [oh-my-zsh, zinit, antigen, zplug]
+    env:
+      ZDOTDIR: ${{ github.workspace }}/zsh-config
+
+    steps:
+      - name: Install Zsh
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh
+
+      - name: Install Cobalt Spark with ${{ matrix.method }}
+        env:
+          METHOD: ${{ matrix.method }}
+        run: |
+          mkdir -p "$ZDOTDIR"
+
+          case "$METHOD" in
+            oh-my-zsh)
+              git clone --quiet --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "$ZDOTDIR/oh-my-zsh"
+              git clone --quiet --depth=1 https://github.com/azhuchkov/cobalt-spark.git \
+                "$ZDOTDIR/oh-my-zsh/custom/themes/cobalt-spark"
+              cat > "$ZDOTDIR/.zshrc" <<'ZSHRC'
+          ZSH="$ZDOTDIR/oh-my-zsh"
+          ZSH_THEME="cobalt-spark/cobalt-spark"
+          ZSH_DISABLE_COMPFIX=true
+          plugins=()
+          source "$ZSH/oh-my-zsh.sh"
+          ZSHRC
+              ;;
+            zinit)
+              git clone --quiet --depth=1 https://github.com/zdharma-continuum/zinit.git "$ZDOTDIR/zinit"
+              cat > "$ZDOTDIR/.zshrc" <<'ZSHRC'
+          source "$ZDOTDIR/zinit/zinit.zsh"
+          zinit light azhuchkov/cobalt-spark
+          ZSHRC
+              ;;
+            antigen)
+              git clone --quiet --depth=1 https://github.com/zsh-users/antigen.git "$ZDOTDIR/antigen"
+              cat > "$ZDOTDIR/.zshrc" <<'ZSHRC'
+          source "$ZDOTDIR/antigen/antigen.zsh"
+          antigen bundle azhuchkov/cobalt-spark --branch=main
+          antigen apply
+          ZSHRC
+              ;;
+            zplug)
+              sudo apt-get install -y gawk # zplug does not support mawk
+              git clone --quiet --depth=1 https://github.com/zplug/zplug.git "$ZDOTDIR/zplug"
+              cat > "$ZDOTDIR/.zshrc" <<'ZSHRC'
+          export ZPLUG_HOME="$ZDOTDIR/zplug"
+          source "$ZPLUG_HOME/init.zsh"
+          zplug "azhuchkov/cobalt-spark"
+          zplug check || zplug install
+          zplug load
+          ZSHRC
+              ;;
+          esac
+
+      - name: Verify Cobalt Spark is loaded
+        run: |
+          zsh -ic '
+            (( $+functions[__cobalt_spark_shorten_git_ref] )) || {
+              print -u2 -- "Cobalt Spark functions were not loaded"
+              exit 1
+            }
+            [[ $PROMPT == *git_prompt_info* &&
+               $PROMPT == *COBALT_SPARK_THEME_PROMPT_SIGN* &&
+               $__cobalt_spark_default_prompt_sign == *⚡* ]] || {
+              print -u2 -- "Cobalt Spark prompt was not configured"
+              exit 1
+            }
+            print -r -- "Cobalt Spark loaded successfully"
+          '
