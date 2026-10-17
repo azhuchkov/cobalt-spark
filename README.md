@@ -1,10 +1,5 @@
 # Cobalt Spark
 
-[![License](https://img.shields.io/github/license/azhuchkov/cobalt-spark?style=flat-square)](LICENSE)
-[![Last update](https://img.shields.io/github/last-commit/azhuchkov/cobalt-spark?style=flat-square&label=last%20update)](https://github.com/azhuchkov/cobalt-spark/commits/main/)
-[![CI](https://github.com/azhuchkov/cobalt-spark/actions/workflows/ci.yml/badge.svg)](https://github.com/azhuchkov/cobalt-spark/actions/workflows/ci.yml)
-
-
 Cobalt Spark is a compact Zsh theme with [live Git updates](#live-git-updates),
 designed for everyday work. Restrained colors keep essential context visible 
 without competing with command output, while a prominent lightning anchor makes 
