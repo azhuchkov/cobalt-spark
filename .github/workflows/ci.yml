@@ -28,8 +28,8 @@ jobs:
             zsh -n "$file"
           done
 
-  plugin-init-check:
-    name: Plugin initialization check (${{ matrix.os }})
+  prompt-smoke-test:
+    name: Prompt smoke test (${{ matrix.os }})
     needs: syntax-check
     runs-on: ${{ matrix.os }}
 
@@ -41,10 +41,13 @@ jobs:
       - *checkout
       - *install-zsh
 
-      - name: Source plugin and verify PROMPT and Git-ref shortening function
+      - name: Install Expect (Linux only)
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y expect
+
+      - name: Verify interactive prompt
         run: |
-          zsh -efic '
-            source ./cobalt-spark.plugin.zsh
-            (( $+functions[__cobalt_spark_shorten_git_ref] ))
-            [[ $PROMPT == *git_prompt_info* ]]
-          '
+          mkdir -p "$RUNNER_TEMP/zsh-config"
+          printf 'source "%s/cobalt-spark.plugin.zsh"\n' "$GITHUB_WORKSPACE" \
+            > "$RUNNER_TEMP/zsh-config/.zshrc"
+          ZDOTDIR="$RUNNER_TEMP/zsh-config" expect tests/smoke.exp zsh -di

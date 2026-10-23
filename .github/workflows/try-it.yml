@@ -12,6 +12,9 @@ jobs:
     timeout-minutes: 3
 
     steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
+
       - name: Install Zsh and Expect
         run: |
           sudo apt-get update
@@ -36,23 +39,4 @@ jobs:
           echo "TRY_IT_COMMAND=$command" >> "$GITHUB_ENV"
 
       - name: Run 'Try it' command
-        run: |
-          expect <<'EXPECT'
-            set timeout 90
-            spawn zsh -fic $env(TRY_IT_COMMAND)
-
-            expect {
-              -exact "⚡" {}
-              timeout { exit 1 }
-              eof { exit 1 }
-            }
-
-            send -- "exit\r"
-
-            expect {
-              eof {}
-              timeout { exit 1 }
-            }
-
-            exit [lindex [wait] 3]
-          EXPECT
+        run: expect tests/smoke.exp zsh -fic "$TRY_IT_COMMAND"
