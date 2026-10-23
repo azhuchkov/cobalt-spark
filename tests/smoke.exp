@@ -9,19 +9,32 @@ spawn {*}$argv
 
 expect {
     -exact "⚡" {}
-    timeout { exit 1 }
-    eof { exit 1 }
+    timeout {
+        puts stderr "Timed out waiting for the Cobalt Spark prompt"
+        exit 1
+    }
+    eof {
+        puts stderr "Shell exited before displaying the Cobalt Spark prompt"
+        exit 1
+    }
 }
 
 send -- "exit\r"
 
 expect {
     eof {}
-    timeout { exit 1 }
+    timeout {
+        puts stderr "Timed out waiting for the shell to exit"
+        exit 1
+    }
 }
 
 set result [wait]
 if {[lindex $result 2] != 0 || [llength $result] > 4} {
+    puts stderr "Shell did not exit normally: $result"
     exit 1
+}
+if {[lindex $result 3] != 0} {
+    puts stderr "Shell exited with status [lindex $result 3]"
 }
 exit [lindex $result 3]
