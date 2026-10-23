@@ -27,6 +27,8 @@ jobs:
 
       - name: Check syntax of Zsh scripts and theme files
         run: |
+          type zsh
+          zsh --version
           shopt -s globstar failglob
           for file in **/*.zsh **/*.zsh-theme; do
             echo "Checking syntax: $file"
@@ -51,6 +53,9 @@ jobs:
       - name: Install Expect (Linux only)
         if: runner.os == 'Linux'
         run: sudo apt-get install -y expect
+
+      - name: Show tool versions
+        run: ./tests/versions.sh
 
       - name: Verify interactive prompt
         run: |
