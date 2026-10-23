@@ -3,10 +3,15 @@ name: CI
 
 on: [push, pull_request]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   syntax-check:
     name: Zsh syntax check
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - &checkout
@@ -32,8 +37,10 @@ jobs:
     name: Prompt smoke test (${{ matrix.os }})
     needs: syntax-check
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
 
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
 
