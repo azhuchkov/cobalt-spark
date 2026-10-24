@@ -5,6 +5,12 @@ if {$argc == 0} {
     exit 1
 }
 
+set non_tty [catch {exec sh -c {test -t 1} >@stdout}]
+
+if {$non_tty} {
+  puts stderr "NOTE: Non-terminal output. Zsh terminal control sequences (e.g. 2004h/2004l) may appear as text."
+}
+
 spawn {*}$argv
 
 expect {
@@ -19,8 +25,6 @@ expect {
     }
 }
 
-# The command may be wrapped by 'bracketed paste mode' control sequences
-# (2004h, 2004l) in the captured output log.
 send -- "exit\r"
 
 expect {
