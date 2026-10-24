@@ -19,6 +19,8 @@ expect {
     }
 }
 
+# The command may be wrapped by 'bracketed paste mode' control sequences
+# (2004h, 2004l) in the captured output log.
 send -- "exit\r"
 
 expect {
