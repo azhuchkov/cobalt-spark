@@ -1,4 +1,4 @@
-name: Try it [smoke test]
+name: Try It
 
 on:
   push:
