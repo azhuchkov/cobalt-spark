@@ -34,10 +34,10 @@ using `robbyrussell`](https://github.com/user-attachments/assets/699dfd18-4705-4
 Try Cobalt Spark without changing your configuration. Run from Zsh:
 
 ```zsh
-source <(curl -fsSL https://raw.githubusercontent.com/azhuchkov/cobalt-spark/main/demo/try.zsh)
+source <(curl -fsSL https://raw.githubusercontent.com/azhuchkov/cobalt-spark/main/demo/try-it.zsh)
 ```
 
-The [script](demo/try.zsh) starts an isolated temporary session. Using `source`
+The [script](demo/try-it.zsh) starts an isolated temporary session. Using `source`
 lets it pick up supported plugins from your current Zsh session automatically.
 No plugins are installed. Type `exit` to return and remove the temporary copy.
 Requires Zsh, Git, and curl.
