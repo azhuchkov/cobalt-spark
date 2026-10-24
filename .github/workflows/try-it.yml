@@ -39,6 +39,7 @@ jobs:
             exit 1
           }
 
+          printf 'Extracted command: %s\n' "$command"
           echo "TRY_IT_COMMAND=$command" >> "$GITHUB_ENV"
 
       - name: Run 'Try it' command
