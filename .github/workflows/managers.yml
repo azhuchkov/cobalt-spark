@@ -1,4 +1,4 @@
-name: Managers Support Check
+name: Plugin Managers
 
 on:
   push:
